@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'purrfect_homes'  # Namespace dell'app
+#app_name = 'purrfect_homes'  # Namespace dell'app
 
 urlpatterns = [
     # Home page
