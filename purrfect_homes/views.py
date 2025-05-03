@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.db.models import Q, Count
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
+from .forms import CustomUserCreationForm
 
 from .models import (
     Cat, CatPhoto, CustomUser, Shelter,
@@ -51,6 +52,16 @@ def home_view(request):
 
     return render(request, 'cats/home.html', context)
 
+#register view
+class RegisterView(CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/register.html'
+
+    def form_valid(self, form):
+        # Imposta automaticamente il ruolo a 'adopter' per i nuovi utenti
+        form.instance.role = 'adopter'
+        return super().form_valid(form)
 
 # Cat Views
 class CatListView(ListView):

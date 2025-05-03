@@ -19,7 +19,7 @@
                 <a href="{% url 'post-list' %}" class="text-gray-700 hover:text-purple-600">Blog</a>
                 <a href="{% url 'event-list' %}" class="text-gray-700 hover:text-purple-600">Events</a>
             </div>
-{% comment %}
+
             <div class="flex items-center space-x-4">
                 {% if user.is_authenticated %}
                     <a href="{% url 'user-profile' %}" class="text-gray-700 hover:text-purple-600">My Profile</a>
@@ -31,7 +31,7 @@
 
                 <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Donate</a>
             </div>
-{% endcomment %}
+
         </nav>
     </header>
 
