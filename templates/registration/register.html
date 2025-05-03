@@ -1,39 +1,172 @@
 {% extends 'base.html' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Crea un account | PurrfectHomes{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-md mx-auto bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-2xl font-bold mb-6 text-center">Create an Account</h2>
-        
-        <form method="post">
-            {% csrf_token %}
-            
-            {% for field in form %}
-            <div class="mb-4">
-                <label for="{{ field.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                    {{ field.label }}
-                </label>
-                {{ field }}
-                {% if field.help_text %}
-                <small class="text-gray-500">{{ field.help_text }}</small>
-                {% endif %}
-                {% for error in field.errors %}
-                <p class="text-red-500 text-sm mt-1">{{ error }}</p>
-                {% endfor %}
+<div class="container mx-auto px-4 py-12">
+    <div class="max-w-lg mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+        <!-- Header colorato -->
+        <div class="bg-purple-600 py-6 px-8">
+            <h2 class="text-2xl font-bold text-white text-center">Unisciti a PurrfectHomes</h2>
+            <p class="text-purple-100 text-center mt-1">Crea il tuo account e inizia ad adottare</p>
+        </div>
+
+        <!-- Contenuto del form -->
+        <div class="p-8">
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Username -->
+                    <div class="col-span-2">
+                        <label for="{{ form.username.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.username.label }} <span class="text-red-500">*</span>
+                        </label>
+                        {{ form.username }}
+                        {% if form.username.help_text %}
+                        <small class="text-gray-500 mt-1 block">{{ form.username.help_text }}</small>
+                        {% endif %}
+                        {% for error in form.username.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-span-2">
+                        <label for="{{ form.email.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.email.label }} <span class="text-red-500">*</span>
+                        </label>
+                        {{ form.email }}
+                        {% for error in form.email.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Nome e Cognome -->
+                    <div>
+                        <label for="{{ form.first_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.first_name.label }}
+                        </label>
+                        {{ form.first_name }}
+                        {% for error in form.first_name.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div>
+                        <label for="{{ form.last_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.last_name.label }}
+                        </label>
+                        {{ form.last_name }}
+                        {% for error in form.last_name.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Telefono -->
+                    <div class="col-span-2 md:col-span-1">
+                        <label for="{{ form.phone.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.phone.label }}
+                        </label>
+                        {{ form.phone }}
+                        {% for error in form.phone.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Indirizzo -->
+                    <div class="col-span-2">
+                        <label for="{{ form.address.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.address.label }}
+                        </label>
+                        {{ form.address }}
+                        {% for error in form.address.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Password -->
+                    <div class="col-span-2 md:col-span-1">
+                        <label for="{{ form.password1.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.password1.label }} <span class="text-red-500">*</span>
+                        </label>
+                        {{ form.password1 }}
+                        {% if form.password1.help_text %}
+                        <small class="text-gray-500 mt-1 block text-sm">{{ form.password1.help_text|safe }}</small>
+                        {% endif %}
+                        {% for error in form.password1.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Conferma Password -->
+                    <div class="col-span-2 md:col-span-1">
+                        <label for="{{ form.password2.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.password2.label }} <span class="text-red-500">*</span>
+                        </label>
+                        {{ form.password2 }}
+                        {% if form.password2.help_text %}
+                        <small class="text-gray-500 mt-1 block">{{ form.password2.help_text }}</small>
+                        {% endif %}
+                        {% for error in form.password2.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Termini e condizioni -->
+                <div class="my-6 text-sm text-gray-600">
+                    <p>Registrandoti, accetti i nostri <a href="#" class="text-purple-600 hover:underline">Termini di servizio</a> e la nostra <a href="#" class="text-purple-600 hover:underline">Privacy Policy</a>.</p>
+                </div>
+
+                <!-- Pulsante di registrazione -->
+                <div>
+                    <button type="submit" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition duration-200 font-medium flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                        </svg>
+                        Crea account
+                    </button>
+                </div>
+            </form>
+
+            <!-- Login link -->
+            <div class="mt-8 text-center border-t border-gray-200 pt-6">
+                <p class="text-gray-600">Hai già un account? <a href="{% url 'login' %}" class="text-purple-600 hover:underline font-medium">Accedi</a></p>
             </div>
-            {% endfor %}
-            
-            <div class="mt-6">
-                <button type="submit" class="w-full bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700">
-                    Register
-                </button>
+        </div>
+    </div>
+
+    <!-- Benefits section -->
+    <div class="max-w-4xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 text-purple-600 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
             </div>
-        </form>
-        
-        <div class="mt-4 text-center">
-            <p>Already have an account? <a href="{% url 'login' %}" class="text-purple-600 hover:underline">Login</a></p>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Gestisci le tue adozioni</h3>
+            <p class="text-gray-600">Tieni traccia delle tue richieste di adozione e resta in contatto con i rifugi.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 text-purple-600 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Ricevi notifiche</h3>
+            <p class="text-gray-600">Ricevi aggiornamenti sui gatti che ti interessano e sugli eventi del tuo rifugio preferito.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 text-purple-600 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Esperienza personalizzata</h3>
+            <p class="text-gray-600">Trova più facilmente il tuo compagno felino ideale con suggerimenti personalizzati.</p>
         </div>
     </div>
 </div>
