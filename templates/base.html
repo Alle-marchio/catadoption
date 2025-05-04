@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Cat Adoption{% endblock %}</title>
+    <!-- Include Tailwind CSS CDN (you can replace with your own build later) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Header/Navigation -->
+    <header class="bg-white shadow">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="{% url 'home' %}" class="text-2xl font-bold text-purple-600">PurrfectHomes</a>
+
+            <div class="hidden md:flex space-x-6">
+                <a href="{% url 'cat-list' %}" class="text-gray-700 hover:text-purple-600">Cats</a>
+                <a href="{% url 'shelter-list' %}" class="text-gray-700 hover:text-purple-600">Shelters</a>
+                <a href="{% url 'post-list' %}" class="text-gray-700 hover:text-purple-600">Blog</a>
+                <a href="{% url 'event-list' %}" class="text-gray-700 hover:text-purple-600">Events</a>
+            </div>
+
+            <div class="flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'user-profile' %}" class="text-gray-700 hover:text-purple-600">My Profile</a>
+                    <a href="{% url 'logout' %}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-gray-700">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-gray-700 hover:text-purple-600">Login</a>
+                    <a href="{% url 'register' %}" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Register</a>
+                {% endif %}
+
+                <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Donate</a>
+            </div>
+
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        {% if messages %}
+        <div class="container mx-auto px-4 mt-4">
+            {% for message in messages %}
+            <div class="p-4 mb-4 rounded
+                {% if message.tags == 'success' %}bg-green-100 text-green-700{% endif %}
+                {% if message.tags == 'error' %}bg-red-100 text-red-700{% endif %}
+                {% if message.tags == 'info' %}bg-blue-100 text-blue-700{% endif %}
+                {% if message.tags == 'warning' %}bg-yellow-100 text-yellow-700{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-12 py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">About PurrfectHomes</h3>
+                    <p class="mb-4">We are dedicated to finding loving homes for cats in need. Our mission is to connect cat lovers with their perfect feline companions.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{% url 'cat-list' %}" class="hover:text-purple-300">Available Cats</a></li>
+                        <li><a href="{% url 'shelter-list' %}" class="hover:text-purple-300">Our Shelters</a></li>
+                        <li><a href="{% url 'post-list' %}" class="hover:text-purple-300">Blog</a></li>
+                        <li><a href="{% url 'event-list' %}" class="hover:text-purple-300">Events</a></li>
+                        <li><a href="{% url 'donation-create' %}" class="hover:text-purple-300">Support Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+                    <p class="mb-2">Email: info@purrfecthomes.example.com</p>
+                    <p class="mb-2">Phone: (123) 456-7890</p>
+                    <p>Address: 123 Cat Street, Purrington, CA 12345</p>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-4 text-center">
+                <p>&copy; {% now "Y" %} PurrfectHomes. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

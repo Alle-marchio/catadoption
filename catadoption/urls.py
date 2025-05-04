@@ -16,8 +16,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from purrfect_homes.views import RegisterView
 
 urlpatterns = [
-    path('purrfect_homes/',include('purrfect_homes.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/register/', RegisterView.as_view(), name='register'),
+    path('', include('purrfect_homes.urls')),  # Include gli URL dell'app purrfect_homes
 ]
+
+# Aggiungi i percorsi per i file media in modalità debug
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
