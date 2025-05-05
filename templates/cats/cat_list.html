@@ -79,13 +79,17 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
             {% for cat in cats %}
             <div class="bg-white rounded-lg shadow overflow-hidden">
+                <!-- foto profilo -->
                 <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    {% if cat.image %}
-                        <img src="{{ cat.image.url }}" alt="{{ cat.name }}" class="w-full h-48 object-cover">
-                    {% else %}
-                        <span class="text-gray-500">{% trans "No image available" %}</span>
+                    {% for photo in cat.photos.all %}
+                    {% if forloop.first %}
+                        <img src="{{ photo.image.url }}" alt="{{ cat.name }}" class="w-full h-48 object-cover">
                     {% endif %}
+                    {% empty %}
+                        <span class="text-gray-500">No image available</span>
+                    {% endfor %}
                 </div>
+                <!-- dati gatto -->
                 <div class="p-4">
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="text-xl font-bold">{{ cat.name }}</h3>
@@ -99,7 +103,7 @@
                             </span>
                         {% endif %}
                     </div>
-
+                <!-- razza gatto -->
                     <p class="text-gray-600 mb-2">
                         {{ cat.breed|default:_("Mixed breed") }}
                         {% if cat.age %}
@@ -110,9 +114,9 @@
                             {% endif %}
                         {% endif %}
                     </p>
-
+                <!-- rifugio gatto -->
                     <p class="text-gray-600 mb-1">{{ cat.shelter.name }}</p>
-
+                <!-- dati sanitari gatto -->
                     <div class="my-2">
                         {% if cat.vaccinated %}
                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded mr-1">
@@ -125,13 +129,13 @@
                             </span>
                         {% endif %}
                     </div>
-
+                <!-- descrizione gatto -->
                     <p class="mb-4 line-clamp-2">{{ cat.description|truncatechars:100 }}</p>
-                    {% comment %}
-                    <a href="{% url 'cat_detail' cat.pk %}" class="block text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition">
+
+                    <a href="{% url 'cat-detail' cat.pk %}" class="block text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition">
                         {% trans "View Details" %}
                     </a>
-                    {% endcomment %}
+
                 </div>
             </div>
             {% endfor %}
