@@ -6,46 +6,60 @@
 <div class="container mx-auto px-4 py-12">
     <div class="max-w-lg mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
         <!-- Header colorato -->
-        <div class="bg-purple-600 py-6 px-8">
-            <h2 class="text-2xl font-bold text-white text-center">Accedi a PurrfectHomes</h2>
-            <p class="text-purple-100 text-center mt-1">Entra nel tuo account per gestire le adozioni</p>
+        <div class="bg-purple-600 py-8 px-8">
+            <h2 class="text-3xl font-bold text-white text-center">Accedi a PurrfectHomes</h2>
+            <p class="text-purple-100 text-center mt-2">Entra nel tuo account per gestire le adozioni</p>
         </div>
 
         <!-- Contenuto del form -->
         <div class="p-8">
-            <form method="post" class="space-y-6">
+            <form method="post" class="space-y-6 text-center">
                 {% csrf_token %}
 
                 <!-- Username -->
-                <div>
-                    <label for="{{ form.username.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                <div class="text-center">
+                    <label for="{{ form.username.id_for_label }}" class="block text-gray-700 font-medium mb-2 text-center">
                         {{ form.username.label }} <span class="text-red-500">*</span>
                     </label>
-                    {{ form.username }}
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input type="text" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" class="w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center" {% if form.username.value %}value="{{ form.username.value }}"{% endif %} required>
+                    </div>
                     {% for error in form.username.errors %}
-                    <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    <p class="text-red-500 text-sm mt-1 text-center">{{ error }}</p>
                     {% endfor %}
                 </div>
 
                 <!-- Password -->
-                <div>
-                    <label for="{{ form.password.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                <div class="text-center">
+                    <label for="{{ form.password.id_for_label }}" class="block text-gray-700 font-medium mb-2 text-center">
                         {{ form.password.label }} <span class="text-red-500">*</span>
                     </label>
-                    {{ form.password }}
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}" class="w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center" required>
+                    </div>
                     {% for error in form.password.errors %}
-                    <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                    <p class="text-red-500 text-sm mt-1 text-center">{{ error }}</p>
                     {% endfor %}
                 </div>
 
                 <!-- Password dimenticata -->
-                <div class="flex justify-end">
+                <div class="flex justify-center">
                     <a href="{% url 'password_reset' %}" class="text-sm text-purple-600 hover:underline">Password dimenticata?</a>
                 </div>
 
                 <!-- Pulsante di login -->
-                <div>
-                    <button type="submit" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition duration-200 font-medium flex items-center justify-center">
+                <div class="mt-8">
+                    <button type="submit" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 transition duration-200 font-medium flex items-center justify-center shadow-md hover:shadow-lg">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 6a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 6a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
                         </svg>
@@ -54,7 +68,7 @@
                 </div>
 
                 {% if form.non_field_errors %}
-                <div class="mt-4 p-3 bg-red-50 text-red-600 rounded-lg">
+                <div class="mt-4 p-3 bg-red-50 text-red-600 rounded-lg text-center">
                     {% for error in form.non_field_errors %}
                     <p>{{ error }}</p>
                     {% endfor %}
