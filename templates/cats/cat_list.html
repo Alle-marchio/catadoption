@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Available Cats - Cat Adoption" %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Search and filters -->
+    <div class="bg-white rounded-lg shadow p-6 mb-8">
+        <h2 class="text-2xl font-bold mb-4">{% trans "Search Cats" %}</h2>
+        <form method="GET" action="{% url 'cat-list' %}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Search box -->
+                <div>
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">{% trans "Search" %}</label>
+                    <input type="text" name="q" id="search" value="{{ request.GET.q }}" placeholder="{% trans 'Name, breed, color...' %}"
+                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                </div>
+
+                <!-- Age filter -->
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700 mb-1">{% trans "Age" %}</label>
+                    <select name="age" id="age" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                        <option value="">{% trans "Any age" %}</option>
+                        <option value="kitten" {% if request.GET.age == 'kitten' %}selected{% endif %}>{% trans "Kitten (< 1 year)" %}</option>
+                        <option value="young" {% if request.GET.age == 'young' %}selected{% endif %}>{% trans "Young (1-7 years)" %}</option>
+                        <option value="adult" {% if request.GET.age == 'adult' %}selected{% endif %}>{% trans "Adult (7+ years)" %}</option>
+                    </select>
+                </div>
+
+                <!-- Gender filter -->
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">{% trans "Gender" %}</label>
+                    <select name="gender" id="gender" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                        <option value="">{% trans "Any gender" %}</option>
+                        <option value="M" {% if request.GET.gender == 'M' %}selected{% endif %}>{% trans "Male" %}</option>
+                        <option value="F" {% if request.GET.gender == 'F' %}selected{% endif %}>{% trans "Female" %}</option>
+                    </select>
+                </div>
+
+                <!-- Shelter filter -->
+                <div>
+                    <label for="shelter" class="block text-sm font-medium text-gray-700 mb-1">{% trans "Shelter" %}</label>
+                    <select name="shelter" id="shelter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                        <option value="">{% trans "Any shelter" %}</option>
+                        {% for shelter in shelters %}
+                            <option value="{{ shelter.id }}" {% if request.GET.shelter == shelter.id|stringformat:"i" %}selected{% endif %}>{{ shelter.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- Filter button -->
+            <div class="flex justify-end">
+                <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                    {% trans "Apply Filters" %}
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Results count -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold">{% trans "Available Cats" %}</h2>
+        <p class="text-gray-600">
+            {% blocktrans with count=page_obj.paginator.count %}
+                {{ count }} cats found
+            {% endblocktrans %}
+            {% if request.GET.q or request.GET.age or request.GET.gender or request.GET.shelter %}
+                <a href="{% url 'cat-list' %}" class="text-purple-600 hover:underline ml-2">
+                    {% trans "(Clear filters)" %}
+                </a>
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Cat grid -->
+    {% if cats %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+            {% for cat in cats %}
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                    {% if cat.image %}
+                        <img src="{{ cat.image.url }}" alt="{{ cat.name }}" class="w-full h-48 object-cover">
+                    {% else %}
+                        <span class="text-gray-500">{% trans "No image available" %}</span>
+                    {% endif %}
+                </div>
+                <div class="p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-xl font-bold">{{ cat.name }}</h3>
+                        {% if cat.gender == 'M' %}
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                {% trans "Male" %}
+                            </span>
+                        {% else %}
+                            <span class="bg-pink-100 text-pink-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                {% trans "Female" %}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <p class="text-gray-600 mb-2">
+                        {{ cat.breed|default:_("Mixed breed") }}
+                        {% if cat.age %}
+                            {% if cat.age < 12 %}
+                                , {{ cat.age }} {% trans "months old" %}
+                            {% else %}
+                                , {{ cat.age|divisibleby:12|yesno:_("1 year,years") }} {% trans "old" %}
+                            {% endif %}
+                        {% endif %}
+                    </p>
+
+                    <p class="text-gray-600 mb-1">{{ cat.shelter.name }}</p>
+
+                    <div class="my-2">
+                        {% if cat.vaccinated %}
+                            <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded mr-1">
+                                {% trans "Vaccinated" %}
+                            </span>
+                        {% endif %}
+                        {% if cat.neutered %}
+                            <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2 py-0.5 rounded">
+                                {% if cat.gender == 'M' %}{% trans "Neutered" %}{% else %}{% trans "Spayed" %}{% endif %}
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <p class="mb-4 line-clamp-2">{{ cat.description|truncatechars:100 }}</p>
+                    {% comment %}
+                    <a href="{% url 'cat_detail' cat.pk %}" class="block text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition">
+                        {% trans "View Details" %}
+                    </a>
+                    {% endcomment %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <!-- No cats found -->
+        <div class="bg-white rounded-lg shadow p-8 text-center mb-8">
+            <p class="text-gray-600 text-lg mb-4">{% trans "No cats available with the selected filters." %}</p>
+            <a href="{% url 'cat-list' %}" class="inline-block px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
+                {% trans "Clear all filters" %}
+            </a>
+        </div>
+    {% endif %}
+
+    <!-- Pagination -->
+    {% if is_paginated %}
+        <div class="flex justify-center">
+            <nav class="inline-flex rounded-md shadow">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.age %}&age={{ request.GET.age }}{% endif %}{% if request.GET.gender %}&gender={{ request.GET.gender }}{% endif %}{% if request.GET.shelter %}&shelter={{ request.GET.shelter }}{% endif %}"
+                       class="px-3 py-2 rounded-l-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                        &laquo; {% trans "First" %}
+                    </a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.age %}&age={{ request.GET.age }}{% endif %}{% if request.GET.gender %}&gender={{ request.GET.gender }}{% endif %}{% if request.GET.shelter %}&shelter={{ request.GET.shelter }}{% endif %}"
+                       class="px-3 py-2 border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                        {% trans "Prev" %}
+                    </a>
+                {% endif %}
+
+                <span class="px-3 py-2 border border-gray-300 bg-purple-100 text-purple-700">
+                    {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.age %}&age={{ request.GET.age }}{% endif %}{% if request.GET.gender %}&gender={{ request.GET.gender }}{% endif %}{% if request.GET.shelter %}&shelter={{ request.GET.shelter }}{% endif %}"
+                       class="px-3 py-2 border-t border-b border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                        {% trans "Next" %}
+                    </a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}{% if request.GET.age %}&age={{ request.GET.age }}{% endif %}{% if request.GET.gender %}&gender={{ request.GET.gender }}{% endif %}{% if request.GET.shelter %}&shelter={{ request.GET.shelter }}{% endif %}"
+                       class="px-3 py-2 rounded-r-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                        {% trans "Last" %} &raquo;
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
