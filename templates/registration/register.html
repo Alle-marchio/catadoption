@@ -5,6 +5,7 @@
 {% block content %}
 <div class="container mx-auto px-4 py-12">
     <div class="max-w-lg mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+
         <!-- Header colorato -->
         <div class="bg-purple-600 py-6 px-8">
             <h2 class="text-2xl font-bold text-white text-center">Unisciti a PurrfectHomes</h2>
@@ -13,103 +14,128 @@
 
         <!-- Contenuto del form -->
         <div class="p-8">
-            <form method="post" class="space-y-6">
+            <form method="post" class="space-y-6 text-center">
                 {% csrf_token %}
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Username -->
-                    <div class="col-span-2">
-                        <label for="{{ form.username.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.username.label }} <span class="text-red-500">*</span>
+                    <div class='col-span-2'>
+                        <label for='{{ form.username.id_for_label }}' class='block text-gray-700 font-medium mb-2'>
+                            {{ form.username.label }}<span class='text-red-500'> *</span>
                         </label>
-                        {{ form.username }}
-                        {% if form.username.help_text %}
-                        <small class="text-gray-500 mt-1 block">{{ form.username.help_text }}</small>
-                        {% endif %}
+                        <div class='relative'>
+                            <div class='absolute inset-y-0 left-3 flex items-center pointer-events-none'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                </svg>
+                            </div>
+                            <input type='text' name='{{ form.username.html_name }}' id='{{ form.username.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' {% if form.username.value %}value='{{ form.username.value }}'{% endif %} required>
+                        </div>
                         {% for error in form.username.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
                         {% endfor %}
                     </div>
 
                     <!-- Email -->
-                    <div class="col-span-2">
-                        <label for="{{ form.email.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.email.label }} <span class="text-red-500">*</span>
-                        </label>
-                        {{ form.email }}
+                    <div class='col-span-2'>
+                        <label for='{{ form.email.id_for_label }}' class='block text-gray-700 font-medium mb-2'>{{ form.email.label }} <span class='text-red-500'>*</span></label>
+                        <div class='relative'>
+                            <div class='absolute inset-y-0 left-3 flex items-center pointer-events-none'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
+                                </svg>
+                            </div>
+                            <input type='email' name='{{ form.email.html_name }}' id='{{ form.email.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' {% if form.email.value %}value='{{ form.email.value }}'{% endif %} required>
+                        </div>
                         {% for error in form.email.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
                         {% endfor %}
                     </div>
 
                     <!-- Nome e Cognome -->
                     <div>
-                        <label for="{{ form.first_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.first_name.label }}
-                        </label>
-                        {{ form.first_name }}
+                        <label for='{{ form.first_name.id_for_label }}' class='block text-gray-700 font-medium mb-2'>{{ form.first_name.label }}</label>
+                        <div class='relative'>
+                            <input type='text' name='{{ form.first_name.html_name }}' id='{{ form.first_name.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' {% if form.first_name.value %}value='{{ form.first_name.value }}'{% endif %}>
+                        </div>
                         {% for error in form.first_name.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
                         {% endfor %}
                     </div>
 
                     <div>
-                        <label for="{{ form.last_name.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.last_name.label }}
-                        </label>
-                        {{ form.last_name }}
+                        <label for='{{ form.last_name.id_for_label }}' class='block text-gray-700 font-medium mb-2'>{{ form.last_name.label }}</label>
+                        <div class='relative'>
+                            <input type='text' name='{{ form.last_name.html_name }}' id='{{ form.last_name.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' {% if form.last_name.value %}value='{{ form.last_name.value }}'{% endif %}>
+                        </div>
                         {% for error in form.last_name.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
                         {% endfor %}
                     </div>
 
                     <!-- Telefono -->
-                    <div class="col-span-2 md:col-span-1">
-                        <label for="{{ form.phone.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.phone.label }}
-                        </label>
-                        {{ form.phone }}
+                    <div class='col-span-2 md:col-span-1'>
+                        <label for='{{ form.phone.id_for_label }}' class='block text-gray-700 font-medium mb-2'>{{ form.phone.label }}</label>
+                        <div class='relative'>
+                            <div class='absolute inset-y-0 left-3 flex items-center pointer-events-none'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
+                                </svg>
+                            </div>
+                            <input type='tel' name='{{ form.phone.html_name }}' id='{{ form.phone.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' {% if form.phone.value %}value='{{ form.phone.value }}'{% endif %}>
+                        </div>
                         {% for error in form.phone.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
                         {% endfor %}
                     </div>
 
                     <!-- Indirizzo -->
-                    <div class="col-span-2">
-                        <label for="{{ form.address.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.address.label }}
-                        </label>
-                        {{ form.address }}
+                    <div class='col-span-2'>
+                        <label for='{{ form.address.id_for_label }}' class='block text-gray-700 font-medium mb-2'>{{ form.address.label }}</label>
+                        <div class='relative'>
+                            <div class='absolute inset-y-0 left-3 flex items-center pointer-events-none'>
+                                <svg xmlns='http://www.w3.org/2000/svg' class='h-5 w-5 text-gray-400' viewBox='0 0 18 18' fill='currentColor'>
+                                    <path fill-rule='evenodd' d='M5 8a5 5 0 1110 0c0 4-5 8-5 8S5 12 5 8zM7 8a3 3 0 116 0 3 3 0 01-6 0z' clip-rule='evenodd' />
+                                </svg>
+                            </div>
+                            <input type='text' name='{{ form.address.html_name }}' id='{{ form.address.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' {% if form.address.value %}value='{{ form.address.value }}'{% endif %}>
+                        </div>
                         {% for error in form.address.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
                         {% endfor %}
                     </div>
 
                     <!-- Password -->
-                    <div class="col-span-2 md:col-span-1">
-                        <label for="{{ form.password1.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.password1.label }} <span class="text-red-500">*</span>
-                        </label>
-                        {{ form.password1 }}
+                    <div class='col-span-2 md:col-span-1'>
+                        <label for='{{ form.password1.id_for_label }}' class='block text-gray-700 font-medium mb-2'>{{ form.password1.label }} <span class='text-red-500'>*</span></label>
+                        <div class='relative'>
+                            <div class='absolute inset-y-0 left-3 flex items-center pointer-events-none'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                </svg>
+                            </div>
+                            <input type='password' name='{{ form.password1.html_name }}' id='{{ form.password1.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' required>
+                        </div>
                         {% if form.password1.help_text %}
-                        <small class="text-gray-500 mt-1 block text-sm">{{ form.password1.help_text|safe }}</small>
+                            <small class="text-gray-500 mt-1 block text-sm">{{ form.password1.help_text|safe }}</small>
                         {% endif %}
                         {% for error in form.password1.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class="text-red-500 text-sm mt-1">{{ error }}</p>
                         {% endfor %}
                     </div>
 
                     <!-- Conferma Password -->
-                    <div class="col-span-2 md:col-span-1">
-                        <label for="{{ form.password2.id_for_label }}" class="block text-gray-700 font-medium mb-2">
-                            {{ form.password2.label }} <span class="text-red-500">*</span>
-                        </label>
-                        {{ form.password2 }}
-                        {% if form.password2.help_text %}
-                        <small class="text-gray-500 mt-1 block">{{ form.password2.help_text }}</small>
-                        {% endif %}
+                    <div class='col-span-2 md:col-span-1'>
+                        <label for='{{ form.password2.id_for_label }}' class='block text-gray-700 font-medium mb-2'>{{ form.password2.label }} <span class='text-red-500'>*</span></label>
+                        <div class='relative'>
+                            <div class='absolute inset-y-0 left-3 flex items-center pointer-events-none'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
+                                </svg>
+                            </div>
+                            <input type='password' name='{{ form.password2.html_name }}' id='{{ form.password2.id_for_label }}' class='w-full pl-10 pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center' required>
+                        </div>
                         {% for error in form.password2.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+                            <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
                         {% endfor %}
                     </div>
                 </div>
@@ -136,7 +162,7 @@
             </div>
         </div>
     </div>
-
+{% comment %}
     <!-- Benefits section -->
     <div class="max-w-4xl mx-auto mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-6 rounded-lg shadow-md text-center">
@@ -169,5 +195,6 @@
             <p class="text-gray-600">Trova più facilmente il tuo compagno felino ideale con suggerimenti personalizzati.</p>
         </div>
     </div>
+    {% endcomment %}
 </div>
 {% endblock %}
