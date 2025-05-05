@@ -62,6 +62,8 @@ class RegisterView(CreateView):
         # Imposta automaticamente il ruolo a 'adopter' per i nuovi utenti
         form.instance.role = 'adopter'
         return super().form_valid(form)
+#reset password view
+#todo vedere prima se fattibile
 
 # Cat Views
 class CatListView(ListView):
