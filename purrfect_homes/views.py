@@ -24,8 +24,8 @@ from .forms import (
 
 # Home view
 def home_view(request):
-    # Get cats available for adoption (limit to 6)
-    available_cats = Cat.objects.filter(adoption_status='available').order_by('?')[:6]
+    # Get cats available for adoption (limit to 3)
+    available_cats = Cat.objects.filter(adoption_status='available').order_by('?')[:3]
 
     # Get latest news/posts (limit to 3)
     latest_posts = Post.objects.filter(is_published=True).order_by('-published_date')[:3]
