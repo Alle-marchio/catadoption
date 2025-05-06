@@ -50,7 +50,7 @@ def home_view(request):
         'adoption_stats': adoption_stats,
     }
 
-    return render(request, 'cats/home.html', context)
+    return render(request, 'home/home.html', context)
 
 #register view
 class RegisterView(CreateView):
