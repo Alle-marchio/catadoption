@@ -6,42 +6,42 @@
 <div class="container mx-auto px-4 py-8">
     <!-- Search and filters -->
     <div class="bg-white rounded-lg shadow p-6 mb-8">
-        <h2 class="text-2xl font-bold mb-4">Search Cats</h2>
+        <h2 class="text-2xl font-bold mb-4">Cerca gatti</h2>
         <form method="GET" action="{% url 'cat-list' %}" class="space-y-4">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Search box -->
                 <div>
-                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-                    <input type="text" name="q" id="search" value="{{ request.GET.q }}" placeholder="Name, breed, color..."
+                    <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Ricerca</label>
+                    <input type="text" name="q" id="search" value="{{ request.GET.q }}" placeholder="Nome, razza, colore..."
                         class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
                 </div>
 
                 <!-- Age filter -->
                 <div>
-                    <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Age</label>
+                    <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Età</label>
                     <select name="age" id="age" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
-                        <option value="">Any age</option>
-                        <option value="kitten" {% if request.GET.age == 'kitten' %}selected{% endif %}>Kitten (< 1 year)</option>
-                        <option value="young" {% if request.GET.age == 'young' %}selected{% endif %}>Young (1-7 years)</option>
-                        <option value="adult" {% if request.GET.age == 'adult' %}selected{% endif %}>Adult (7+ years)</option>
+                        <option value="">Qualsiasi età</option>
+                        <option value="kitten" {% if request.GET.age == 'kitten' %}selected{% endif %}>Gattino (< 1 anno)</option>
+                        <option value="young" {% if request.GET.age == 'young' %}selected{% endif %}>Giovane (1-7 anni)</option>
+                        <option value="adult" {% if request.GET.age == 'adult' %}selected{% endif %}>Adulto (7+ anni)</option>
                     </select>
                 </div>
 
                 <!-- Gender filter -->
                 <div>
-                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+                    <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Sesso</label>
                     <select name="gender" id="gender" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
-                        <option value="">Any gender</option>
-                        <option value="M" {% if request.GET.gender == 'M' %}selected{% endif %}>Male</option>
-                        <option value="F" {% if request.GET.gender == 'F' %}selected{% endif %}>Female</option>
+                        <option value="">Qualsiasi genere</option>
+                        <option value="M" {% if request.GET.gender == 'M' %}selected{% endif %}>Maschio</option>
+                        <option value="F" {% if request.GET.gender == 'F' %}selected{% endif %}>Femmina</option>
                     </select>
                 </div>
 
                 <!-- Shelter filter -->
                 <div>
-                    <label for="shelter" class="block text-sm font-medium text-gray-700 mb-1">Shelter</label>
+                    <label for="shelter" class="block text-sm font-medium text-gray-700 mb-1">Rifugio</label>
                     <select name="shelter" id="shelter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
-                        <option value="">Any shelter</option>
+                        <option value="">Qualsiasi rifugio</option>
                         {% for shelter in shelters %}
                             <option value="{{ shelter.id }}" {% if request.GET.shelter == shelter.id|stringformat:"i" %}selected{% endif %}>{{ shelter.name }}</option>
                         {% endfor %}
@@ -52,7 +52,7 @@
             <!-- Filter button -->
             <div class="flex justify-end">
                 <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
-                    Apply Filters
+                    Applica filtro
                 </button>
             </div>
         </form>
@@ -60,12 +60,12 @@
 
     <!-- Results count -->
     <div class="flex justify-between items-center mb-6">
-        <h2 class="text-3xl font-bold">Available Cats</h2>
+        <h2 class="text-3xl font-bold">Gatti disponibili</h2>
         <p class="text-gray-600">
-            {{ page_obj.paginator.count }} cats found
+            {{ page_obj.paginator.count }} Risultati trovati
             {% if request.GET.q or request.GET.age or request.GET.gender or request.GET.shelter %}
                 <a href="{% url 'cat-list' %}" class="text-purple-600 hover:underline ml-2">
-                    (Clear filters)
+                    (Reset filtro)
                 </a>
             {% endif %}
         </p>
@@ -92,24 +92,18 @@
                         <h3 class="text-xl font-bold">{{ cat.name }}</h3>
                         {% if cat.gender == 'M' %}
                             <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                Male
+                                Maschio
                             </span>
                         {% else %}
                             <span class="bg-pink-100 text-pink-800 text-xs font-medium px-2.5 py-0.5 rounded-full">
-                                Female
+                                Femmina
                             </span>
                         {% endif %}
                     </div>
                 <!-- razza gatto -->
                     <p class="text-gray-600 mb-2">
-                        {{ cat.breed|default:"Mixed breed" }}
-                        {% if cat.age %}
-                            {% if cat.age < 12 %}
-                                , {{ cat.age }} months old
-                            {% else %}
-                                , {{ cat.age|divisibleby:12|yesno:"1 year,years" }} old
-                            {% endif %}
-                        {% endif %}
+                        {{ cat.breed|default:"Meticcio" }}
+                        {% if cat.formatted_age %}, {{ cat.formatted_age }}{% endif %}
                     </p>
                 <!-- rifugio gatto -->
                     <p class="text-gray-600 mb-1">{{ cat.shelter.name }}</p>
@@ -117,12 +111,12 @@
                     <div class="my-2">
                         {% if cat.vaccinated %}
                             <span class="bg-green-100 text-green-800 text-xs font-medium px-2 py-0.5 rounded mr-1">
-                                Vaccinated
+                                Vaccinato
                             </span>
                         {% endif %}
                         {% if cat.neutered %}
                             <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2 py-0.5 rounded">
-                                {% if cat.gender == 'M' %}Neutered{% else %}Spayed{% endif %}
+                                {% if cat.gender == 'M' %}Castrato{% else %}Sterilizzata{% endif %}
                             </span>
                         {% endif %}
                     </div>
@@ -130,7 +124,7 @@
                     <p class="mb-4 line-clamp-2">{{ cat.description|truncatechars:100 }}</p>
 
                     <a href="{% url 'cat-detail' cat.pk %}" class="block text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition">
-                        View Details
+                        Vedi dettagli
                     </a>
 
                 </div>
@@ -140,9 +134,9 @@
     {% else %}
         <!-- No cats found -->
         <div class="bg-white rounded-lg shadow p-8 text-center mb-8">
-            <p class="text-gray-600 text-lg mb-4">No cats available with the selected filters.</p>
+            <p class="text-gray-600 text-lg mb-4">Nessun gatto trovato con questo filtro.</p>
             <a href="{% url 'cat-list' %}" class="inline-block px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">
-                Clear all filters
+                Rimuovi tutti i filtri
             </a>
         </div>
     {% endif %}

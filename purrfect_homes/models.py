@@ -38,8 +38,24 @@ class Cat(models.Model):
     )
     shelter = models.ForeignKey('Shelter', on_delete=models.CASCADE, related_name='cats')
 
+    def formatted_age(self):
+        if self.age < 12:
+            return f"{self.age} mes{'i' if self.age != 1 else 'e'}"
+        else:
+            years = self.age // 12
+            remaining_months = self.age % 12
+            if remaining_months == 0:
+                return f"{years} ann{'i' if years > 1 else 'o'}"
+            else:
+                return f"{years} ann{'i' if years > 1 else 'o'} e {remaining_months} mes{'i' if remaining_months > 1 else 'e'}"
+
     def __str__(self):
         return self.name
+    """
+    # le query sono ordinate tramite l'id
+    class Meta:
+        ordering = ['id']
+    """
 
 
 class CustomUser(AbstractUser):
