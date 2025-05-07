@@ -56,31 +56,41 @@
         <!-- Sezione info -->
         <div class="w-full md:w-1/2">
             <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-6">
+            <!--età-->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <span class="text-sm text-gray-500">Età</span>
                     <p class="font-medium">{{ cat.formatted_age }}</p>
                 </div>
+            <!--sesso-->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <span class="text-sm text-gray-500">Genere</span>
                     <p class="font-medium">
                         {% if cat.gender == 'M' %}Maschio{% else %}Femmina{% endif %}
                     </p>
                 </div>
+            <!--razza-->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <span class="text-sm text-gray-500">Razza</span>
                     <p class="font-medium">{{ cat.breed|default:"Meticcio" }}</p>
                 </div>
+            <!--colore-->
                 <div class="bg-gray-50 p-4 rounded-lg">
                     <span class="text-sm text-gray-500">Colore</span>
                     <p class="font-medium">{{ cat.color|default:"Non specificato" }}</p>
                 </div>
+            <!--rifugio (forse meglio togliere questo dato)-->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <span class="text-sm text-gray-500">Rifugio</span>
+                    <p class="font-medium">{{ cat.shelter|default:"Non specificato" }}</p>
+                </div>
             </div>
 
+            <!--descrizione -->
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-2">Informazioni su {{ cat.name }}</h2>
                 <p class="text-gray-700">{{ cat.description }}</p>
             </div>
-
+            <!--info sanitarie-->
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-3">Informazioni sanitarie</h2>
                 <div class="flex flex-wrap gap-4">
@@ -115,7 +125,7 @@
                         {% if cat.gender == 'M' %}Castrato{% else %}Sterilizzata{% endif %}
                     </div>
                 </div>
-
+                <!--stato medico gatto-->
                 {% if cat.health_status %}
                 <div class="mt-4">
                     <h3 class="text-lg font-medium mb-1">Stato di salute</h3>
@@ -123,21 +133,21 @@
                 </div>
                 {% endif %}
             </div>
-
+            <!--personalità gatto-->
             {% if cat.personality %}
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-2">Personalità</h2>
                 <p class="text-gray-700">{{ cat.personality }}</p>
             </div>
             {% endif %}
-
+            <!-- storia gatto-->
             {% if cat.history %}
             <div class="mb-6">
                 <h2 class="text-xl font-semibold mb-2">Storia personale</h2>
                 <p class="text-gray-700">{{ cat.history }}</p>
             </div>
             {% endif %}
-
+            <!-- parte adozione -->
             {% if cat.adoption_status == 'available' %}
             <div class="bg-gray-50 p-6 rounded-lg mt-6">
                 <h2 class="text-xl font-semibold mb-4">Interessato ad adottare {{ cat.name }}?</h2>
@@ -161,7 +171,7 @@
             {% endif %}
         </div>
     </div>
-
+    <!-- gatti simili -->
     {% if similar_cats %}
     <div class="mt-10">
         <h2 class="text-2xl font-bold mb-6">Gatti simili che potrebbero piacerti</h2>
