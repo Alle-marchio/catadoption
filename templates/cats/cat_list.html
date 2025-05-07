@@ -5,21 +5,21 @@
 {% block content %}
 <div class="container mx-auto px-4 py-8">
     <!-- Search and filters -->
-    <div class="bg-white rounded-lg shadow p-6 mb-8">
+    <div class="bg-gradient-to-br from-white to-purple-50 rounded-2xl shadow-lg p-8 mb-10 border border-purple-100">
         <h2 class="text-2xl font-bold mb-4">Cerca gatti</h2>
         <form method="GET" action="{% url 'cat-list' %}" class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Search box -->
                 <div>
                     <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Ricerca</label>
                     <input type="text" name="q" id="search" value="{{ request.GET.q }}" placeholder="Nome, razza, colore..."
-                        class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                        class="w-full rounded-md border border-gray-300 px-2 py-1 focus:border-purple-300 focus:ring focus:ring-purple-300 focus:ring-opacity-50">
                 </div>
 
                 <!-- Age filter -->
                 <div>
                     <label for="age" class="block text-sm font-medium text-gray-700 mb-1">Età</label>
-                    <select name="age" id="age" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                    <select name="age" id="age" class="w-full rounded-md border border-gray-300 px-2 py-1 focus:border-purple-300 focus:ring focus:ring-purple-300 focus:ring-opacity-50">
                         <option value="">Qualsiasi età</option>
                         <option value="kitten" {% if request.GET.age == 'kitten' %}selected{% endif %}>Gattino (< 1 anno)</option>
                         <option value="young" {% if request.GET.age == 'young' %}selected{% endif %}>Giovane (1-7 anni)</option>
@@ -30,7 +30,7 @@
                 <!-- Gender filter -->
                 <div>
                     <label for="gender" class="block text-sm font-medium text-gray-700 mb-1">Sesso</label>
-                    <select name="gender" id="gender" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                    <select name="gender" id="gender" class="w-full rounded-md border border-gray-300 px-2 py-1 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-300 focus:ring-opacity-50">
                         <option value="">Qualsiasi genere</option>
                         <option value="M" {% if request.GET.gender == 'M' %}selected{% endif %}>Maschio</option>
                         <option value="F" {% if request.GET.gender == 'F' %}selected{% endif %}>Femmina</option>
@@ -40,7 +40,7 @@
                 <!-- Shelter filter -->
                 <div>
                     <label for="shelter" class="block text-sm font-medium text-gray-700 mb-1">Rifugio</label>
-                    <select name="shelter" id="shelter" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-500 focus:ring-opacity-50">
+                    <select name="shelter" id="shelter" class="w-full rounded-md border border-gray-300 px-2 py-1 shadow-sm focus:border-purple-300 focus:ring focus:ring-purple-300 focus:ring-opacity-50">
                         <option value="">Qualsiasi rifugio</option>
                         {% for shelter in shelters %}
                             <option value="{{ shelter.id }}" {% if request.GET.shelter == shelter.id|stringformat:"i" %}selected{% endif %}>{{ shelter.name }}</option>
