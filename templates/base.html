@@ -14,22 +14,22 @@
             <a href="{% url 'home' %}" class="text-2xl font-bold text-purple-600">Purrfect Homes</a>
 
             <div class="hidden md:flex space-x-6">
-                <a href="{% url 'cat-list' %}" class="text-gray-700 hover:text-purple-600">Cats</a>
-                <a href="{% url 'shelter-list' %}" class="text-gray-700 hover:text-purple-600">Shelters</a>
+                <a href="{% url 'cat-list' %}" class="text-gray-700 hover:text-purple-600">Gatti</a>
+                <a href="{% url 'shelter-list' %}" class="text-gray-700 hover:text-purple-600">Rifugi</a>
                 <a href="{% url 'post-list' %}" class="text-gray-700 hover:text-purple-600">Blog</a>
-                <a href="{% url 'event-list' %}" class="text-gray-700 hover:text-purple-600">Events</a>
+                <a href="{% url 'event-list' %}" class="text-gray-700 hover:text-purple-600">Eventi</a>
             </div>
 
             <div class="flex items-center space-x-4">
                 {% if user.is_authenticated %}
-                    <a href="{% url 'user-profile' %}" class="text-gray-700 hover:text-purple-600">My Profile</a>
+                    <a href="{% url 'user-profile' %}" class="text-gray-700 hover:text-purple-600">Profilo</a>
                     <a href="{% url 'logout' %}" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-gray-700">Logout</a>
                 {% else %}
                     <a href="{% url 'login' %}" class="text-gray-700 hover:text-purple-600">Login</a>
-                    <a href="{% url 'register' %}" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Register</a>
+                    <a href="{% url 'register' %}" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">Registrazione</a>
                 {% endif %}
 
-                <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Donate</a>
+                <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Donazioni</a>
             </div>
 
         </nav>
@@ -65,17 +65,17 @@
                 <div>
                     <h3 class="text-xl font-bold mb-4">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="{% url 'cat-list' %}" class="hover:text-purple-300">Available Cats</a></li>
-                        <li><a href="{% url 'shelter-list' %}" class="hover:text-purple-300">Our Shelters</a></li>
+                        <li><a href="{% url 'cat-list' %}" class="hover:text-purple-300">Gatti disponibili</a></li>
+                        <li><a href="{% url 'shelter-list' %}" class="hover:text-purple-300">I nostri rifugi</a></li>
                         <li><a href="{% url 'post-list' %}" class="hover:text-purple-300">Blog</a></li>
-                        <li><a href="{% url 'event-list' %}" class="hover:text-purple-300">Events</a></li>
+                        <li><a href="{% url 'event-list' %}" class="hover:text-purple-300">Eventi</a></li>
                         <li><a href="{% url 'donation-create' %}" class="hover:text-purple-300">Support Us</a></li>
                     </ul>
                 </div>
                 <div>
                     <h3 class="text-xl font-bold mb-4">Contact Us</h3>
                     <p class="mb-2">Email: info@purrfecthomes.example.com</p>
-                    <p class="mb-2">Phone: (123) 456-7890</p>
+                    <p class="mb-2">Phone: (+123) 456-7890</p>
                     <p>Address: 123 Cat Street, Purrington, CA 12345</p>
                 </div>
             </div>

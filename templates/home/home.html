@@ -43,7 +43,7 @@
             </div>
             <div class="p-4">
                 <h3 class="text-xl font-bold mb-2">{{ cat.name }}</h3>
-                <p class="text-gray-600 mb-2">{{ cat.breed }}{% if cat.age %}, {{ cat.age }} months old{% endif %}</p>
+                <p class="text-gray-600 mb-2">{{ cat.breed|default:"Meticcio" }}{% if cat.formatted_age %}, {{ cat.formatted_age }}{% endif %}</p>
                 <p class="mb-4 line-clamp-2">{{ cat.description|truncatechars:100 }}</p>
                 <a href="{% url 'cat-detail' cat.pk %}" class="block text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition">View Details</a>
             </div>
