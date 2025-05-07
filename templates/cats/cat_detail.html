@@ -1,10 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
 
-</body>
-</html>
+{% block title %}{{ cat.name }} - Purrfect Homes{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+    <div class="flex items-center mb-6">
+        <a href="{% url 'cat-list' %}" class="text-gray-600 hover:text-gray-900 mr-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            Torna alla lista
+        </a>
+        <h1 class="text-3xl font-bold text-gray-900">{{ cat.name }}</h1>
+        <div class="ml-4 px-3 py-1 rounded-full text-sm font-medium 
+            {% if cat.adoption_status == 'available' %}bg-green-100 text-green-800
+            {% elif cat.adoption_status == 'reserved' %}bg-yellow-100 text-yellow-800
+            {% else %}bg-gray-100 text-gray-800{% endif %}">
+            {% if cat.adoption_status == 'available' %}Disponibile
+            {% elif cat.adoption_status == 'reserved' %}Riservato
+            {% else %}Adottato{% endif %}
+        </div>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-8 mb-12">
+        <!-- Sezione immagini -->
+        <div class="w-full md:w-1/2">
+            <div class="w-full h-96 rounded-lg overflow-hidden mb-4 bg-gray-100">
+                {% if cat.image_set.all %}
+                    <img src="{{ cat.image_set.first.image.url }}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+                {% else %}
+                    <img src="{% static 'images/cat-placeholder.jpg' %}" alt="{{ cat.name }}" class="w-full h-full object-cover">
+                {% endif %}
+            </div>
+
+            <!-- Galleria immagini -->
+            {% if cat.image_set.count > 1 %}
+            <div class="flex gap-2 overflow-x-auto">
+                {% for image in cat.image_set.all %}
+                    {% if not forloop.first %}
+                    <div class="flex-shrink-0 w-20 h-20">
+                        <img src="{{ image.image.url }}" alt="{{ cat.name }}" class="w-full h-full object-cover rounded cursor-pointer">
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sezione info -->
+        <div class="w-full md:w-1/2">
+            <!-- Info di base -->
+            <div class="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <span class="text-sm text-gray-500">Età</span>
+                    <p class="font-medium">{{ cat.formatted_age }}</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <span class="text-sm text-gray-500">Genere</span>
+                    <p class="font-medium">
+                        {% if cat.gender == 'M' %}Maschio{% else %}Femmina{% endif %}
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <span class="text-sm text-gray-500">Razza</span>
+                    <p class="font-medium">{{ cat.breed|default:"Misto" }}</p>
+                </div>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <span class="text-sm text-gray-500">Colore</span>
+                    <p class="font-medium">{{ cat.color }}</p>
+                </div>
+            </div>
+
+            <!-- Descrizione -->
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">Su {{ cat.name }}</h2>
+                <p class="text-gray-700">{{ cat.description }}</p>
+            </div>
+
+            <!-- Info sanitarie -->
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-3">Informazioni sanitarie</h2>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 flex items-center justify-center rounded-full
+                            {% if cat.vaccinated %}bg-green-100{% else %}bg-gray-100{% endif %} mr-2">
+                            {% if cat.vaccinated %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <span>Vaccinato</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-6 h-6 flex items-center justify-center rounded-full
+                            {% if cat.neutered %}bg-green-100{% else %}bg-gray-100{% endif %} mr-2">
+                            {% if cat.neutered %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            {% else %}
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            </svg>
+                            {% endif %}
+                        </div>
+                        <span>Sterilizzato/Castrato</span>
+                    </div>
+                </div>
+
+                {% if cat.health_status %}
+                <div class="mt-4">
+                    <h3 class="text-lg font-medium mb-1">Stato di salute</h3>
+                    <p class="text-gray-700">{{ cat.health_status }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Personalità -->
+            {% if cat.personality %}
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">Personalità</h2>
+                <p class="text-gray-700">{{ cat.personality }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Storia -->
+            {% if cat.history %}
+            <div class="mb-6">
+                <h2 class="text-xl font-semibold mb-2">Storia personale</h2>
+                <p class="text-gray-700">{{ cat.history }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Form adozione -->
+            {% if cat.adoption_status == 'available' %}
+            <div class="bg-gray-50 p-6 rounded-lg mt-6">
+                <h2 class="text-xl font-semibold mb-4">Interessato ad adottare {{ cat.name }}?</h2>
+
+                {% if has_requested %}
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <p class="text-blue-700">Hai già inviato una richiesta di adozione per questo gatto. Ti contatteremo presto!</p>
+                </div>
+                {% elif user.is_authenticated %}
+                <form method="post" action="{% url 'request_adoption' cat.id %}">
+                    {% csrf_token %}
+                    {{ adoption_form.as_p }}
+                    <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                        Richiedi adozione
+                    </button>
+                </form>
+                {% else %}
+                <p>Per richiedere l'adozione, <a href="{% url 'login' %}?next={{ request.path }}" class="text-blue-600 hover:text-blue-800 underline">accedi</a> al tuo account.</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Gatti simili -->
+    {% if similar_cats %}
+    <div class="mt-10">
+        <h2 class="text-2xl font-bold mb-6">Gatti simili che potrebbero piacerti</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for similar_cat in similar_cats %}
+            <a href="{% url 'cat-detail' similar_cat.id %}" class="block group">
+                <div class="bg-white rounded-lg overflow-hidden shadow-md transition-transform duration-300 group-hover:shadow-lg group-hover:-translate-y-1">
+                    <div class="h-48 overflow-hidden">
+                        {% if similar_cat.image_set.first %}
+                            <img src="{{ similar_cat.image_set.first.image.url }}" alt="{{ similar_cat.name }}" class="w-full h-full object-cover">
+                        {% else %}
+                            <img src="{% static 'images/cat-placeholder.jpg' %}" alt="{{ similar_cat.name }}" class="w-full h-full object-cover">
+                        {% endif %}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-semibold text-lg mb-1">{{ similar_cat.name }}</h3>
+                        <p class="text-gray-600">{{ similar_cat.formatted_age }} •
+                            {% if similar_cat.gender == 'M' %}Maschio{% else %}Femmina{% endif %}
+                        </p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
