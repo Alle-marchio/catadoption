@@ -143,7 +143,7 @@ class CatDetailView(DetailView):
 class AdoptionRequestCreateView(LoginRequiredMixin, CreateView):
     model = AdoptionRequest
     form_class = AdoptionRequestForm
-    template_name = 'cats/adoption_request_form.html'
+    template_name = 'adoption/adoption_request_form.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user

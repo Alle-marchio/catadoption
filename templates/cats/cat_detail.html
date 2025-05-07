@@ -157,9 +157,9 @@
                     Hai già inviato una richiesta di adozione per {{ cat.name }}. Ti contatteremo presto!
                 </div>
                 {% elif user.is_authenticated %}
-                <form method="post" action="{% url 'request_adoption' cat.id %}">
+                <form method="post" action="{% url 'adoption-request-form' cat.id %}">
                     {% csrf_token %}
-                    {{ adoption_form.as_p }}
+
                     <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
                         Richiedi adozione
                     </button>
