@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'purrfect_homes',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

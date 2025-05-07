@@ -172,7 +172,11 @@ class AdoptionRequestCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('user-profile')
 
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Recupera il gatto dal database usando l'ID nell'URL
+        context['cat'] = get_object_or_404(Cat, pk=self.kwargs['cat_id'])
+        return context
 @login_required
 def user_profile_view(request):
     # Get user's adoption requests
