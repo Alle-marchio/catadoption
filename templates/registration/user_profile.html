@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="mt-6">
-                    <a href="#" class="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors">Edit Profile</a>
+                    <a href="#" class="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors">Modifica profilo</a>
                 </div>
             </div>
         </div>
@@ -36,21 +36,21 @@
                 <button class="inline-block py-4 px-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active" 
                        id="adoption-requests-tab" data-tabs-target="#adoption-requests" type="button" role="tab" 
                        aria-controls="adoption-requests" aria-selected="true">
-                    Adoption Requests
+                    Richieste di adozione
                 </button>
             </li>
             <li class="mr-2">
                 <button class="inline-block py-4 px-4 text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg" 
                        id="adopted-cats-tab" data-tabs-target="#adopted-cats" type="button" role="tab" 
                        aria-controls="adopted-cats" aria-selected="false">
-                    My Adopted Cats
+                    I miei gatti
                 </button>
             </li>
             <li class="mr-2">
                 <button class="inline-block py-4 px-4 text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg" 
                        id="donations-tab" data-tabs-target="#donations" type="button" role="tab" 
                        aria-controls="donations" aria-selected="false">
-                    My Donations
+                    Le mie donazioni
                 </button>
             </li>
         </ul>
@@ -74,11 +74,11 @@
                                     {% elif request.status == 'rejected' %}bg-white text-red-700
                                     {% else %}bg-gray-800 text-white{% endif %}">
                                     {% if request.status == 'pending' %}
-                                        Pending
+                                        riservato
                                     {% elif request.status == 'approved' %}
-                                        Approved
+                                        Approvata
                                     {% else %}
-                                        Rejected
+                                        Rifiutata
                                     {% endif %}
                                 </span>
                             </div>
@@ -94,12 +94,12 @@
                                         {% endif %}
                                     </div>
                                     <div class="w-full md:w-2/3 md:pl-4">
-                                        <p class="mb-2"><span class="font-semibold">Requested on:</span> {{ request.request_date|date:"d/m/Y" }}</p>
-                                        <p class="mb-2"><span class="font-semibold">Reason:</span> {{ request.reason|truncatechars:100 }}</p>
+                                        <p class="mb-2"><span class="font-semibold">Data richiesta:</span> {{ request.request_date|date:"d/m/Y" }}</p>
+                                        <p class="mb-2"><span class="font-semibold">Motivazione:</span> {{ request.reason|truncatechars:100 }}</p>
                                         {% if request.notes %}
-                                            <p class="mb-2"><span class="font-semibold">Notes:</span> {{ request.notes|truncatechars:100 }}</p>
+                                            <p class="mb-2"><span class="font-semibold">Note:</span> {{ request.notes|truncatechars:100 }}</p>
                                         {% endif %}
-                                        <a href="{% url 'cat-detail' request.cat.id %}" class="mt-2 inline-block px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">View Cat</a>
+                                        <a href="{% url 'cat-detail' request.cat.id %}" class="mt-2 inline-block px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Vedi gatto</a>
                                     </div>
                                 </div>
                             </div>
@@ -108,8 +108,8 @@
                 </div>
             {% else %}
                 <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
-                    You haven't made any adoption requests yet.
-                    <a href="{% url 'cat-list' %}" class="font-medium underline">Browse our cats</a>
+                    Non hai ancora fatto nessuna richiesta di adozione.
+                    <a href="{% url 'cat-list' %}" class="font-medium underline">Cerca tra i gatti</a>
                 </div>
             {% endif %}
         </div>
