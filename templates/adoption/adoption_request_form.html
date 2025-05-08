@@ -6,163 +6,166 @@
 
 {% block content %}
 <div class="bg-gray-100 py-12">
-  <div class="max-w-4xl mx-auto bg-white shadow overflow-hidden rounded-lg">
-  <!-- tasto per tornare indietro-->
-    <div class="bg-white px-4 py-3 sm:px-6">
-      <a href="{% url 'cat-detail' cat.pk %}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-        </svg>
-        Torna alla scheda del gatto
-      </a>
+    <div class="max-w-4xl mx-auto bg-white shadow overflow-hidden rounded-lg">
+        <!-- tasto per tornare indietro-->
+        <div class="bg-white px-4 py-3 sm:px-6">
+            <a href="{% url 'cat-detail' cat.pk %}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                <svg class="-ml-1 mr-2 h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                Torna alla scheda del gatto
+            </a>
+        </div>
+        <div class="px-4 py-2 sm:px-6">
+            <h1 class="text-2xl font-semibold text-gray-900">
+                Richiesta di Adozione
+            </h1>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                Completa questo modulo per esprimere il tuo interesse nell'adottare
+                <span class="font-medium">{{ cat.name }}</span>.
+            </p>
+        </div>
+        <div class="border-t border-gray-200">
+            <dl class="sm:grid sm:grid-cols-3">
+                <!-- Colonna con le informazioni del gatto -->
+                <div class="col-span-2">
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Nome del Gatto</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.name }}</dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Età</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.formatted_age }}</dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Sesso</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.get_gender_display }}</dd>
+                    </div>
+                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Razza</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.breed }}</dd>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">rifugio</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.shelter }}</dd>
+                    </div>
+                </div>
+                <!-- Colonna con la foto del gatto -->
+                <div class="col-span-1 flex items-center justify-center p-4">
+                    {% for photo in cat.photos.all %}
+                        {% if forloop.first %}
+                            <img src="{{ photo.image.url }}" alt="{{ cat.name }}" class="w-full h-56 object-cover rounded-md shadow-sm">
+                        {% endif %}
+                    {% empty %}
+                        <div class="w-full max-w-xs h-48 bg-gray-200 rounded-md flex items-center justify-center">
+                            <span class="text-gray-500">Nessuna foto disponibile</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </dl>
+        </div>
     </div>
-    <div class="px-4 py-2 sm:px-6">
-      <h1 class="text-2xl font-semibold text-gray-900">
-        Richiesta di Adozione
-      </h1>
-      <p class="mt-1 max-w-2xl text-sm text-gray-500">
-        Completa questo modulo per esprimere il tuo interesse nell'adottare
-        <span class="font-medium">{{ cat.name }}</span>.
-      </p>
+
+    <div class="max-w-4xl mx-auto mt-8 bg-white shadow overflow-hidden rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+            <h2 class="text-2xl font-semibold text-gray-900">
+                Informazioni sulla Richiesta
+            </h2>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                Raccontaci di te per aiutarci a valutare la tua idoneità all'adozione.
+            </p>
+        </div>
+        <div class="border-t border-gray-200">
+            <form method="post" class="px-4 py-5 sm:p-6 space-y-4" novalidate>
+                {% csrf_token %}
+
+                <div>
+                    <label for='{{ form.living_situation.id_for_label }}' class='block text-sm font-medium text-gray-700'>
+                        {{ form.living_situation.label }}<span class='text-red-500'> *</span>
+                    </label>
+                    <div class="mt-1">
+                        {{ form.living_situation|attr:"class:w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
+                    </div>
+                    {% if form.living_situation.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.living_situation.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for='{{ form.experience.id_for_label }}' class='block text-sm font-medium text-gray-700'>
+                        {{ form.experience.label }}<span class='text-red-500'> *</span>
+                    </label>
+                    <div class="mt-1">
+                        {{ form.experience|attr:"class:w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
+                    </div>
+                    {% if form.experience.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.experience.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for='{{ form.reason.id_for_label }}' class='block text-sm font-medium text-gray-700'>
+                        {{ form.reason.label }}<span class='text-red-500'> *</span>
+                    </label>
+                    <div class="mt-1">
+                        {{ form.reason|attr:"class:w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
+                    </div>
+                    {% if form.reason.errors %}
+                        <p class="mt-2 text-sm text-red-600">{{ form.reason.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <div class="bg-blue-50 rounded-md p-3">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                La tua richiesta sarà attentamente valutata e riceverai un riscontro entro 3 giorni lavorativi.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <a href="{% url 'cat-detail' cat.pk %}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Annulla
+                    </a>
+                    <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Invia Richiesta
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="border-t border-gray-200">
-      <dl class="sm:grid sm:grid-cols-3">
-        <!-- Colonna con le informazioni del gatto -->
-        <div class="col-span-2">
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Nome del Gatto</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.name }}</dd>
-          </div>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Età</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.formatted_age }}</dd>
-          </div>
-          <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Sesso</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.get_gender_display }}</dd>
-          </div>
-          <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt class="text-sm font-medium text-gray-500">Razza</dt>
-            <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{{ cat.breed }}</dd>
-          </div>
-        </div>
-
-        <!-- Colonna con la foto del gatto -->
-        <div class="col-span-1 flex items-center justify-center p-4">
-        {% for photo in cat.photos.all %}
-            {% if forloop.first %}
-                <img src="{{ photo.image.url }}" alt="{{ cat.name }}" class="w-full h-48 object-cover rounded-md shadow-sm">
-            {% endif %}
-        {% empty %}
-            <div class="w-full max-w-xs h-48 bg-gray-200 rounded-md flex items-center justify-center">
-                <span class="text-gray-500">Nessuna foto disponibile</span>
-            </div>
-        {% endfor %}
-        </div>
-      </dl>
-    </div>
-  </div>
-
-  <div class="max-w-4xl mx-auto mt-8 bg-white shadow overflow-hidden rounded-lg">
-    <div class="px-4 py-5 sm:px-6">
-      <h2 class="text-2xl font-semibold text-gray-900">
-        Informazioni sulla Richiesta
-      </h2>
-      <p class="mt-1 max-w-2xl text-sm text-gray-500">
-        Raccontaci di te per aiutarci a valutare la tua idoneità all'adozione.
-      </p>
-    </div>
-    <div class="border-t border-gray-200">
-      <form method="post" class="px-4 py-5 sm:p-6 space-y-4" novalidate>
-        {% csrf_token %}
-
-        <div>
-          <label for='{{ form.living_situation.id_for_label }}' class='block text-sm font-medium text-gray-700'>
-            {{ form.living_situation.label }}<span class='text-red-500'> *</span>
-          </label>
-          <div class="mt-1">
-            {{ form.living_situation|attr:"class:w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
-          </div>
-            {% if form.living_situation.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ form.living_situation.errors.0 }}</p>
-            {% endif %}
-        </div>
-
-        <div>
-          <label for='{{ form.experience.id_for_label }}' class='block text-sm font-medium text-gray-700'>
-            {{ form.experience.label }}<span class='text-red-500'> *</span>
-          </label>
-          <div class="mt-1">
-            {{ form.experience|attr:"class:w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
-          </div>
-            {% if form.experience.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ form.experience.errors.0 }}</p>
-            {% endif %}
-        </div>
-
-        <div>
-          <label for='{{ form.reason.id_for_label }}' class='block text-sm font-medium text-gray-700'>
-            {{ form.reason.label }}<span class='text-red-500'> *</span>
-          </label>
-          <div class="mt-1">
-            {{ form.reason|attr:"class:w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
-          </div>
-            {% if form.reason.errors %}
-                <p class="mt-2 text-sm text-red-600">{{ form.reason.errors.0 }}</p>
-            {% endif %}
-        </div>
-
-        <div class="bg-blue-50 rounded-md p-3">
-          <div class="flex">
-            <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-blue-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-              </svg>
-            </div>
-            <div class="ml-3">
-              <p class="text-sm text-blue-700">
-                La tua richiesta sarà attentamente valutata e riceverai un riscontro entro 3 giorni lavorativi.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex justify-end">
-          <a href="{% url 'cat-detail' cat.pk %}" class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Annulla
-          </a>
-          <button type="submit" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            Invia Richiesta
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
 {% comment %}
-  {% if messages %}
-  <div class="max-w-4xl mx-auto mt-8 space-y-4">
-    {% for message in messages %}
-    <div class="rounded-md bg-{{ message.tags }}-50 p-4">
-      <div class="flex">
-        <div class="flex-shrink-0">
-          <svg class="h-5 w-5 text-{{ message.tags }}-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-            {% if message.tags == 'error' %}
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-            {% else %}
-            <path fill-rule="evenodd" d="M10 18a8 8 0 11-16 0 8 8 0 0116 0zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10 9.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414z" clip-rule="evenodd" />
-            {% endif %}
-          </svg>
+    {% if messages %}
+        <div class="max-w-4xl mx-auto mt-8 space-y-4">
+            {% for message in messages %}
+                <div class="rounded-md bg-{{ message.tags }}-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-{{ message.tags }}-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                {% if message.tags == 'error' %}
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                {% else %}
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 11-16 0 8 8 0 0116 0zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10 9.586l-1.293-1.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414z" clip-rule="evenodd" />
+                                {% endif %}
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-{{ message.tags }}-800">
+                                {{ message }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
-        <div class="ml-3">
-          <p class="text-sm font-medium text-{{ message.tags }}-800">
-            {{ message }}
-          </p>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
+    {% endif %}
 {% endcomment %}
 </div>
 {% endblock %}

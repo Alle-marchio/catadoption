@@ -151,12 +151,12 @@ class AdoptionRequestCreateView(LoginRequiredMixin, CreateView):
 
         # Check if cat is still available
         if form.instance.cat.adoption_status != 'available':
-            messages.error(self.request, _('Sorry, this cat is no longer available for adoption.'))
+            messages.error(self.request, _('Mi dispiace, questo gatto non è più disponibile per l\'adozione.'))
             return redirect('cat-detail', pk=form.instance.cat.pk)
 
         # Check if user has already submitted a request for this cat
         if AdoptionRequest.objects.filter(user=self.request.user, cat=form.instance.cat, status='pending').exists():
-            messages.error(self.request, _('You have already submitted a request for this cat.'))
+            messages.error(self.request, _('Hai già fatto una richiesta per questo gatto.'))
             return redirect('cat-detail', pk=form.instance.cat.pk)
 
         response = super().form_valid(form)
@@ -166,11 +166,11 @@ class AdoptionRequestCreateView(LoginRequiredMixin, CreateView):
         cat.adoption_status = 'reserved'
         cat.save()
 
-        messages.success(self.request, _('Your adoption request has been submitted successfully.'))
+        messages.success(self.request, _('La tua richiesta di adozione è andata a buon fine.'))
         return response
 
     def get_success_url(self):
-        return reverse('user-profile')
+        return reverse('home')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
