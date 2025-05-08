@@ -56,25 +56,25 @@ class AdoptionRequestForm(forms.ModelForm):
             'living_situation': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
-                'placeholder': _('Describe your living situation (apartment, house, yard, etc.)'),
+                'placeholder': _('Descrivi la tua abitazione (appartamento, casa, campagna, etc.)'),
             }),
             'experience': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
-                'placeholder': _('Tell us about your experience with pets'),
+                'placeholder': _('Dicci qualcosa sulla tua esperienza con gli animali'),
             }),
             'reason': forms.Textarea(attrs={
                 'class': 'form-control',
                 'rows': 4,
-                'placeholder': _('Why do you want to adopt this cat?'),
+                'placeholder': _('Perchè vuoi adottare uno dei nostri gatti?'),
             }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['living_situation'].label = _('Tell us about your home')
-        self.fields['experience'].label = _('Your experience with pets')
-        self.fields['reason'].label = _('Why adopt this cat?')
+        self.fields['living_situation'].label = _('Dimmi qualcosa su casa tua')
+        self.fields['experience'].label = _('La tua esperienza con gli animali')
+        self.fields['reason'].label = _('Perchè adottare questo gatto?')
 
 
 class DonationForm(forms.ModelForm):

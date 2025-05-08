@@ -7,8 +7,8 @@ import uuid
 
 class Cat(models.Model):
     GENDER_CHOICES = [
-        ('M', _('Male')),
-        ('F', _('Female')),
+        ('M', _('Maschio')),
+        ('F', _('Femmina')),
     ]
 
     ADOPTION_STATUS = [

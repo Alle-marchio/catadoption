@@ -12,7 +12,7 @@ urlpatterns = [
     path('cats/<int:pk>/', views.CatDetailView.as_view(), name='cat-detail'),
 
     # Adoption request routes
-    path('cats/<int:cat_id>/adopt/', views.AdoptionRequestCreateView.as_view(), name='adoption-request-create'),
+    path('cats/<int:cat_id>/adopt/', views.AdoptionRequestCreateView.as_view(), name='adoption-request-form'),
 
     # User profile
     path('profile/', views.user_profile_view, name='user-profile'),
