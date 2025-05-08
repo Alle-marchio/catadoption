@@ -198,7 +198,7 @@ def user_profile_view(request):
         'donations': donations,
     }
 
-    return render(request, 'cats/user_profile.html', context)
+    return render(request, 'registration/user_profile.html', context)
 
 
 # Shelter Views
