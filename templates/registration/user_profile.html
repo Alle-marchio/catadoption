@@ -1,10 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}User Profile{% endblock %}
+{% block title %}Il mio profilo{% endblock %}
 
 {% block content %}
 <div class="container mx-auto px-4 py-8">
-    <!-- User Information Section -->
     <div class="mb-8">
         <div class="bg-white rounded-lg shadow-md">
             <div class="p-6">
@@ -17,48 +16,49 @@
                         </div>
                     {% endif %}
                     <div class="ml-0 md:ml-6 mt-4 md:mt-0 text-center md:text-left">
-                        <h1 class="text-2xl font-bold">{{ user.get_full_name|default:user.username }}</h1>
-                        <p class="text-gray-600">{{ user.email }}</p>
-                        <p class="text-gray-600">{{ user.phone }}</p>
+                        <h1 class="text-2xl font-bold">Ciao, {{ user.get_full_name|default:user.username }}!</h1>
+                        <p class="text-gray-600">Email: {{ user.email }}</p>
+                        {% if user.phone %}
+                            <p class="text-gray-600">Telefono: {{ user.phone }}</p>
+                        {% endif %}
                     </div>
                 </div>
+            {% comment %}
                 <div class="mt-6">
-                    <a href="#" class="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors">Modifica profilo</a>
+                    <a href="#" class="px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors">Modifica i tuoi dati</a>
                 </div>
+            {% endcomment %}
             </div>
         </div>
     </div>
 
-    <!-- Tabs Navigation -->
     <div class="mb-6 border-b border-gray-200">
         <ul class="flex flex-wrap -mb-px" id="profileTabs" role="tablist">
             <li class="mr-2">
-                <button class="inline-block py-4 px-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active" 
-                       id="adoption-requests-tab" data-tabs-target="#adoption-requests" type="button" role="tab" 
+                <button class="inline-block py-4 px-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active"
+                       id="adoption-requests-tab" data-tabs-target="#adoption-requests" type="button" role="tab"
                        aria-controls="adoption-requests" aria-selected="true">
-                    Richieste di adozione
+                    Le tue richieste di adozione
                 </button>
             </li>
             <li class="mr-2">
-                <button class="inline-block py-4 px-4 text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg" 
-                       id="adopted-cats-tab" data-tabs-target="#adopted-cats" type="button" role="tab" 
+                <button class="inline-block py-4 px-4 text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg"
+                       id="adopted-cats-tab" data-tabs-target="#adopted-cats" type="button" role="tab"
                        aria-controls="adopted-cats" aria-selected="false">
-                    I miei gatti
+                    I tuoi amici felini
                 </button>
             </li>
             <li class="mr-2">
-                <button class="inline-block py-4 px-4 text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg" 
-                       id="donations-tab" data-tabs-target="#donations" type="button" role="tab" 
+                <button class="inline-block py-4 px-4 text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg"
+                       id="donations-tab" data-tabs-target="#donations" type="button" role="tab"
                        aria-controls="donations" aria-selected="false">
-                    Le mie donazioni
+                    Il tuo supporto
                 </button>
             </li>
         </ul>
     </div>
 
-    <!-- Tab Content -->
     <div id="tabContent">
-        <!-- Adoption Requests Tab -->
         <div class="block" id="adoption-requests" role="tabpanel" aria-labelledby="adoption-requests-tab">
             {% if adoption_requests %}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -69,16 +69,16 @@
                                 {% elif request.status == 'rejected' %}bg-red-500 text-white
                                 {% else %}bg-yellow-400 text-gray-800{% endif %}">
                                 <h5 class="font-bold">{{ request.cat.name }}</h5>
-                                <span class="px-2 py-1 text-xs rounded-full 
+                                <span class="px-2 py-1 text-xs rounded-full
                                     {% if request.status == 'approved' %}bg-white text-green-700
                                     {% elif request.status == 'rejected' %}bg-white text-red-700
                                     {% else %}bg-gray-800 text-white{% endif %}">
                                     {% if request.status == 'pending' %}
-                                        riservato
+                                        In attesa di risposta
                                     {% elif request.status == 'approved' %}
-                                        Approvata
+                                        Richiesta approvata!
                                     {% else %}
-                                        Rifiutata
+                                        Richiesta non approvata
                                     {% endif %}
                                 </span>
                             </div>
@@ -89,17 +89,17 @@
                                             <img src="{{ request.cat.photos.first.image.url }}" alt="{{ request.cat.name }}" class="w-full h-32 object-cover rounded">
                                         {% else %}
                                             <div class="w-full h-32 bg-gray-200 rounded flex items-center justify-center">
-                                                <span class="text-gray-500">No photo</span>
+                                                <span class="text-gray-500">Nessuna foto</span>
                                             </div>
                                         {% endif %}
                                     </div>
                                     <div class="w-full md:w-2/3 md:pl-4">
-                                        <p class="mb-2"><span class="font-semibold">Data richiesta:</span> {{ request.request_date|date:"d/m/Y" }}</p>
-                                        <p class="mb-2"><span class="font-semibold">Motivazione:</span> {{ request.reason|truncatechars:100 }}</p>
+                                        <p class="mb-2"><span class="font-semibold">Richiesta inviata il:</span> {{ request.request_date|date:"d/m/Y" }}</p>
+                                        <p class="mb-2"><span class="font-semibold">La tua motivazione:</span> {{ request.reason|truncatechars:100 }}</p>
                                         {% if request.notes %}
-                                            <p class="mb-2"><span class="font-semibold">Note:</span> {{ request.notes|truncatechars:100 }}</p>
+                                            <p class="mb-2"><span class="font-semibold">Note dello staff:</span> {{ request.notes|truncatechars:100 }}</p>
                                         {% endif %}
-                                        <a href="{% url 'cat-detail' request.cat.id %}" class="mt-2 inline-block px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Vedi gatto</a>
+                                        <a href="{% url 'cat-detail' request.cat.id %}" class="mt-2 inline-block px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Scopri di più su {{ request.cat.name }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -108,13 +108,12 @@
                 </div>
             {% else %}
                 <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
-                    Non hai ancora fatto nessuna richiesta di adozione.
-                    <a href="{% url 'cat-list' %}" class="font-medium underline">Cerca tra i gatti</a>
+                    Non hai ancora inviato nessuna richiesta di adozione.
+                    <a href="{% url 'cat-list' %}" class="font-medium underline">Dai un'occhiata ai nostri gatti in cerca di casa!</a>
                 </div>
             {% endif %}
         </div>
 
-        <!-- Adopted Cats Tab -->
         <div class="hidden" id="adopted-cats" role="tabpanel" aria-labelledby="adopted-cats-tab">
             {% if adopted_cats %}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -127,15 +126,15 @@
                                 <img src="{{ cat.photos.first.image.url }}" alt="{{ cat.name }}" class="w-full h-48 object-cover">
                             {% else %}
                                 <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                                    <span class="text-gray-500">No photo</span>
+                                    <span class="text-gray-500">Nessuna foto</span>
                                 </div>
                             {% endif %}
                             <div class="p-4">
-                                <p class="mb-2"><span class="font-semibold">Age:</span> {{ cat.formatted_age }}</p>
-                                <p class="mb-2"><span class="font-semibold">Breed:</span> {{ cat.breed|default:"Mixed" }}</p>
-                                <p class="mb-2"><span class="font-semibold">Personality:</span> {{ cat.personality|truncatechars:50 }}</p>
+                                <p class="mb-2"><span class="font-semibold">Età:</span> {{ cat.formatted_age }}</p>
+                                <p class="mb-2"><span class="font-semibold">Razza:</span> {{ cat.breed|default:"Misto" }}</p>
+                                <p class="mb-2"><span class="font-semibold">Carattere:</span> {{ cat.personality|truncatechars:50 }}</p>
                                 <div class="mt-4">
-                                    <a href="{% url 'cat-detail' cat.id %}" class="px-3 py-1 text-sm border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors">View Details</a>
+                                    <a href="{% url 'cat-detail' cat.id %}" class="px-3 py-1 text-sm border border-blue-500 text-blue-500 rounded hover:bg-blue-500 hover:text-white transition-colors">Guarda i dettagli</a>
                                 </div>
                             </div>
                         </div>
@@ -143,24 +142,23 @@
                 </div>
             {% else %}
                 <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
-                    You haven't adopted any cats yet.
-                    <a href="{% url 'cat-list' %}" class="font-medium underline">Browse our cats</a>
+                    Non hai ancora adottato nessun gatto.
+                    <a href="{% url 'cat-list' %}" class="font-medium underline">Scopri i nostri adorabili mici!</a>
                 </div>
             {% endif %}
         </div>
 
-        <!-- Donations Tab -->
         <div class="hidden" id="donations" role="tabpanel" aria-labelledby="donations-tab">
             {% if donations %}
                 <div class="overflow-x-auto">
                     <table class="min-w-full bg-white">
                         <thead class="bg-gray-100">
                             <tr>
-                                <th class="py-3 px-4 text-left">Date</th>
-                                <th class="py-3 px-4 text-left">Type</th>
-                                <th class="py-3 px-4 text-left">Shelter</th>
-                                <th class="py-3 px-4 text-left">Amount/Description</th>
-                                <th class="py-3 px-4 text-left">Message</th>
+                                <th class="py-3 px-4 text-left">Data</th>
+                                <th class="py-3 px-4 text-left">Tipo</th>
+                                <th class="py-3 px-4 text-left">Associazione</th>
+                                <th class="py-3 px-4 text-left">Importo/Descrizione</th>
+                                <th class="py-3 px-4 text-left">Messaggio</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -169,13 +167,13 @@
                                     <td class="py-3 px-4">{{ donation.date|date:"d/m/Y" }}</td>
                                     <td class="py-3 px-4">
                                         {% if donation.donation_type == 'money' %}
-                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Money</span>
+                                            <span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800">Denaro</span>
                                         {% elif donation.donation_type == 'food' %}
-                                            <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">Food</span>
+                                            <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800">Cibo</span>
                                         {% elif donation.donation_type == 'supplies' %}
-                                            <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Supplies</span>
+                                            <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800">Materiali</span>
                                         {% else %}
-                                            <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">Other</span>
+                                            <span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-800">Altro</span>
                                         {% endif %}
                                     </td>
                                     <td class="py-3 px-4">{{ donation.shelter.name }}</td>
@@ -192,13 +190,13 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-6">         
-                    <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Make Another Donation</a>
+                <div class="mt-6">
+                    <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Fai un'altra donazione</a>
                 </div>
             {% else %}
                 <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
-                    You haven't made any donations yet.
-                    <a href="{% url 'donation-create' %}" class="font-medium underline">Make a donation</a>
+                    Non hai ancora effettuato donazioni.
+                    <a href="{% url 'donation-create' %}" class="font-medium underline">Sostieni i nostri amici a quattro zampe!</a>
                 </div>
             {% endif %}
         </div>
@@ -208,47 +206,47 @@
 
 {% block extra_js %}
 <script>
-    // Tab functionality
+    // Funzionalità delle tab
     document.addEventListener('DOMContentLoaded', function() {
         const tabButtons = document.querySelectorAll('[data-tabs-target]');
         const tabContents = document.querySelectorAll('#tabContent > div');
-        
-        // Check for hash in URL
+
+        // Verifica se c'è un hash nell'URL
         const hash = window.location.hash;
         if (hash) {
             const targetTab = document.querySelector(`[data-tabs-target="${hash}"]`);
-            if (targetTab) activateTab(targetTab);
+            if (targetTab) attivaTab(targetTab);
         }
-        
+
         tabButtons.forEach(button => {
             button.addEventListener('click', () => {
-                activateTab(button);
-                // Update URL hash
+                attivaTab(button);
+                // Aggiorna l'hash nell'URL
                 const targetId = button.getAttribute('data-tabs-target');
                 window.location.hash = targetId;
             });
         });
-        
-        function activateTab(clickedButton) {
-            // Deactivate all tabs
+
+        function attivaTab(clickedButton) {
+            // Disattiva tutte le tab
             tabButtons.forEach(btn => {
                 btn.classList.remove('text-blue-600', 'border-blue-600');
                 btn.classList.add('text-gray-500', 'border-transparent');
                 btn.setAttribute('aria-selected', 'false');
             });
-            
-            // Hide all content
+
+            // Nascondi tutti i contenuti
             tabContents.forEach(content => {
                 content.classList.add('hidden');
                 content.classList.remove('block');
             });
-            
-            // Activate clicked tab
+
+            // Attiva la tab cliccata
             clickedButton.classList.remove('text-gray-500', 'border-transparent');
             clickedButton.classList.add('text-blue-600', 'border-blue-600');
             clickedButton.setAttribute('aria-selected', 'true');
-            
-            // Show corresponding content
+
+            // Mostra il contenuto corrispondente
             const target = document.querySelector(clickedButton.getAttribute('data-tabs-target'));
             target.classList.remove('hidden');
             target.classList.add('block');
