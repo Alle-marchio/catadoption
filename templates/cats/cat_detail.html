@@ -92,7 +92,7 @@
             </div>
             <!--info sanitarie-->
             <div class="mb-6">
-                <h2 class="text-xl font-semibold mb-3">Informazioni sanitarie</h2>
+                <h2 class="text-xl font-semibold mb-2">Informazioni sanitarie</h2>
                 <div class="flex flex-wrap gap-4">
                     <div class="flex items-center">
                         <div class="w-6 h-6 flex items-center justify-center rounded-full
@@ -128,7 +128,7 @@
                 <!--stato medico gatto-->
                 {% if cat.health_status %}
                 <div class="mt-4">
-                    <h3 class="text-lg font-medium mb-1">Stato di salute</h3>
+                    <h3 class="text-xl font-semibold mb-2">Stato di salute</h3>
                     <p class="text-gray-700">{{ cat.health_status }}</p>
                 </div>
                 {% endif %}
@@ -151,7 +151,6 @@
             {% if cat.adoption_status == 'available' %}
             <div class="bg-gray-50 p-6 rounded-lg mt-6">
                 <h2 class="text-xl font-semibold mb-4">Interessato ad adottare {{ cat.name }}?</h2>
-
                 {% if has_requested %}
                 <div class="p-4 bg-blue-100 text-blue-800 border border-blue-300 rounded">
                     Hai già inviato una richiesta di adozione per {{ cat.name }}. Ti contatteremo presto!
@@ -160,7 +159,7 @@
                 <form method="post" action="{% url 'adoption-request-form' cat.id %}">
                     {% csrf_token %}
 
-                    <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+                    <button type="submit" class="mt-2 ml-1 inline-flex justify-center py-2 px-8 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Richiedi adozione
                     </button>
                 </form>
