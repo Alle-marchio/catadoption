@@ -14,7 +14,7 @@
 
         <!-- Contenuto del form -->
         <div class="p-8">
-            <form method="post" class="space-y-6 text-center">
+            <form method="post" enctype="multipart/form-data" class="space-y-6 text-center">
                 {% csrf_token %}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Username -->
@@ -101,6 +101,30 @@
                         </div>
                         {% for error in form.address.errors %}
                             <p class='text-red-500 text-sm mt-1 text-center'>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+
+                <!-- Foto di profilo -->
+                    <div class="col-span-2">
+                        <label for="{{ form.photo.id_for_label }}" class="block text-gray-700 font-medium mb-2">
+                            {{ form.photo.label }}
+                        </label>
+                        <div class='relative'>
+                            <div class='absolute inset-y-0 left-3 flex items-center pointer-events-none'>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                </svg>
+                            </div>
+                            <input
+                                type="file"
+                                name="{{ form.photo.html_name }}"
+                                id="{{ form.photo.id_for_label }}"
+                                accept="image/*"
+                                class="w-full pr-4 py-3 rounded-lg border-2 border-purple-200 focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 shadow-sm text-center"
+                            >
+                        </div>
+                        {% for error in form.photo.errors %}
+                            <p class="text-red-500 text-sm mt-1 text-center">{{ error }}</p>
                         {% endfor %}
                     </div>
 
