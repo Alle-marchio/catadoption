@@ -275,7 +275,7 @@ class PostDetailView(DetailView):
 # Event Views
 class EventListView(ListView):
     model = Event
-    template_name = 'cats/event_list.html'
+    template_name = 'event/event_list.html'
     context_object_name = 'events'
 
     def get_queryset(self):
@@ -287,7 +287,7 @@ class EventListView(ListView):
 
 class EventDetailView(DetailView):
     model = Event
-    template_name = 'cats/event_detail.html'
+    template_name = 'event/event_detail.html'
     context_object_name = 'event'
 
 
