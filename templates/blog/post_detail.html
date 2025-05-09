@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }} | Purrfect Homes{% endblock %}
+
+{% block content %}
+<article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8">
+        <a href="{% url 'post-list' %}" class="text-indigo-600 hover:text-indigo-900 flex items-center">
+            <svg class="h-5 w-5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            Torna al blog
+        </a>
+    </div>
+
+    <header class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ post.title }}</h1>
+        
+        <div class="flex flex-wrap items-center text-gray-600 mb-6">
+            <div class="mr-8 flex items-center mb-2">
+                <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                </svg>
+                <span>{{ post.author.get_full_name|default:post.author.username }}</span>
+            </div>
+            <div class="flex items-center mb-2">
+                <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                </svg>
+                <span>{{ post.published_date|date:"d M Y" }}</span>
+            </div>
+            {% if post.updated_date != post.published_date %}
+                <div class="ml-8 flex items-center mb-2">
+                    <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Aggiornato: {{ post.updated_date|date:"d M Y" }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if post.image %}
+        <div class="mb-10">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-auto rounded-lg shadow-md">
+        </div>
+    {% endif %}
+
+    <div class="prose max-w-none prose-indigo">
+        {{ post.content|safe }}
+    </div>
+
+    {% if related_posts %}
+        <div class="mt-16 pt-8 border-t border-gray-200">
+            <h2 class="text-2xl font-bold text-gray-900 mb-6">Potrebbe interessarti anche</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {% for related in related_posts %}
+                    <div class="bg-white overflow-hidden shadow-sm rounded-lg hover:shadow transition-shadow duration-300">
+                        {% if related.image %}
+                            <div class="h-40 w-full overflow-hidden">
+                                <img src="{{ related.image.url }}" alt="{{ related.title }}" class="w-full h-full object-cover">
+                            </div>
+                        {% else %}
+                            <div class="h-40 w-full bg-gray-100 flex items-center justify-center">
+                                <svg class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                        {% endif %}
+                        <div class="p-4">
+                            <div class="text-sm text-gray-500 mb-1">{{ related.published_date|date:"d M Y" }}</div>
+                            <a href="{% url 'post-detail' related.slug %}" class="block">
+                                <h3 class="text-lg font-semibold text-gray-900 hover:text-indigo-600">{{ related.title }}</h3>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</article>
+{% endblock %}
