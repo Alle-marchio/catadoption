@@ -220,7 +220,7 @@ class ShelterListView(ListView):
 
         return context
 
-
+'''
 class ShelterDetailView(DetailView):
     model = Shelter
     template_name = 'shelter/shelter_detail.html'
@@ -244,7 +244,7 @@ class ShelterDetailView(DetailView):
 
         return context
 
-
+'''
 # Blog/Post Views
 class PostListView(ListView):
     model = Post
@@ -307,10 +307,10 @@ class DonationCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, _('Grazie per la tua donazione!'))
         return response
 
-
+'''
 def donation_thank_you_view(request):
     return render(request, 'donation/donation_thank_you.html')
-
+'''
 
 # Staff views (for shelter staff and administrators)
 class StaffRequiredMixin(UserPassesTestMixin):
