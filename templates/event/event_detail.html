@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ event.name }} - Purrfect Homes{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-6" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+            <li class="inline-flex items-center">
+                <a href="{% url 'home' %}" class="text-gray-600 hover:text-amber-500">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+                    </svg>
+                    Home
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <a href="{% url 'event-list' %}" class="ml-1 text-gray-600 hover:text-amber-500 md:ml-2">Eventi</a>
+                </div>
+            </li>
+            <li aria-current="page">
+                <div class="flex items-center">
+                    <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="ml-1 text-gray-500 md:ml-2 font-medium truncate">{{ event.name }}</span>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <!-- Event Header -->
+        <div class="relative">
+            {% if event.image %}
+                <div class="h-64 md:h-96 overflow-hidden">
+                    <img src="{{ event.image.url }}" alt="{{ event.name }}" class="w-full h-full object-cover">
+                </div>
+            {% else %}
+                <div class="h-64 md:h-96 bg-gray-200 flex items-center justify-center">
+                    <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Event Details -->
+        <div class="p-6 md:p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ event.name }}</h1>
+            
+            <div class="flex flex-wrap gap-6 mb-8">
+                <!-- Date and Time -->
+                <div class="flex items-center">
+                    <div class="bg-amber-100 rounded-full p-3 mr-3">
+                        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Data e Ora</p>
+                        <p class="text-gray-800">{{ event.date|date:"l, d F Y" }} alle {{ event.date|date:"H:i" }}</p>
+                    </div>
+                </div>
+                
+                <!-- Location -->
+                <div class="flex items-center">
+                    <div class="bg-amber-100 rounded-full p-3 mr-3">
+                        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Luogo</p>
+                        <p class="text-gray-800">{{ event.location }}</p>
+                    </div>
+                </div>
+                
+                <!-- Shelter -->
+                <div class="flex items-center">
+                    <div class="bg-amber-100 rounded-full p-3 mr-3">
+                        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Rifugio</p>
+                        <a href="{% url 'shelter-detail' event.shelter.pk %}" class="text-amber-500 hover:text-amber-600">{{ event.shelter.name }}</a>
+                    </div>
+                </div>
+                
+                <!-- Organizer -->
+                <div class="flex items-center">
+                    <div class="bg-amber-100 rounded-full p-3 mr-3">
+                        <svg class="w-6 h-6 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500 font-medium">Organizzatore</p>
+                        <p class="text-gray-800">{{ event.organizer.get_full_name|default:event.organizer.username }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Descrizione dell'evento</h2>
+                <div class="prose max-w-none text-gray-700">
+                    {{ event.description|linebreaks }}
+                </div>
+            </div>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap gap-4">
+                <a href="{% url 'event-list' %}" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 shadow-sm text-base font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 17l-5-5m0 0l5-5m-5 5h12"></path>
+                    </svg>
+                    Torna agli Eventi
+                </a>
+                
+                <a href="{% url 'shelter-detail' event.shelter.pk %}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-amber-500 hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                    Visita il Rifugio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
