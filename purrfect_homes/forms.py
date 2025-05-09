@@ -7,22 +7,36 @@ from .models import (
 
 
 class CustomUserCreationForm(UserCreationForm):
+    # Aggiunto campo per la foto di profilo (opzionale)
+    photo = forms.ImageField(
+        required=False,
+        label="Foto di profilo",
+        widget=forms.ClearableFileInput(attrs={
+            'class': 'form-control',
+            'accept': 'image/*',
+        })
+    )
+
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'first_name', 'last_name', 'phone', 'address')
+        # Estesi i campi includendo 'photo'
+        fields = (
+            'username', 'email', 'first_name', 'last_name',
+            'phone', 'address', 'photo',
+        )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Make email required
+        # Rendi obbligatoria l'email
         self.fields['email'].required = True
 
-        # Add placeholders and classes
+        # Aggiungi placeholder e classe CSS a tutti i widget (tranne photo già configurato)
         for field_name, field in self.fields.items():
-            field.widget.attrs.update({
-                'class': 'form-control',
-                'placeholder': field.label
-            })
-
+            if field_name != 'photo':
+                field.widget.attrs.update({
+                    'class': 'form-control',
+                    'placeholder': field.label
+                })
 
 class CustomUserUpdateForm(forms.ModelForm):
     class Meta:
