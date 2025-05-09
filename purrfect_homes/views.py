@@ -296,7 +296,7 @@ class DonationCreateView(LoginRequiredMixin, CreateView):
     model = Donation
     form_class = DonationForm
     template_name = 'donation/donation_form.html'
-    success_url = reverse_lazy('donation-thank-you')
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         # Set donor if not anonymous
