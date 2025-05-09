@@ -187,10 +187,10 @@ class Event(models.Model):
 
 class Donation(models.Model):
     DONATION_TYPES = [
-        ('money', _('Money')),
-        ('food', _('Food')),
-        ('supplies', _('Supplies')),
-        ('other', _('Other')),
+        ('money', _('Denaro')),
+        ('food', _('Cibo')),
+        ('supplies', _('Provviste')),
+        ('other', _('Altro')),
     ]
 
     donor = models.ForeignKey(

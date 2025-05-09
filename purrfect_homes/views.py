@@ -304,7 +304,7 @@ class DonationCreateView(LoginRequiredMixin, CreateView):
             form.instance.donor = self.request.user
 
         response = super().form_valid(form)
-        messages.success(self.request, _('Thank you for your donation!'))
+        messages.success(self.request, _('Grazie per la tua donazione!'))
         return response
 
 
