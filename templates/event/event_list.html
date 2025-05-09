@@ -3,14 +3,16 @@
 {% block title %}Eventi - Purrfect Homes{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Prossimi Eventi</h1>
-        <p class="text-gray-600 mt-2">Scopri tutti i nostri eventi e partecipa alla comunità di amanti dei gatti.</p>
+<div class="bg-gray-100 py-6">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl font-bold text-amber-600 mb-2">Vieni a Conoscerci!</h1>
+        <p class="text-lg text-gray-700 mb-0">Partecipa ai nostri eventi per supportare i nostri amici felini e la comunità di Purrfect Homes.</p>
     </div>
+</div>
 
+<div class="container mx-auto px-4 py-8">
     {% if events %}
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-2">
             {% for event in events %}
                 <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-300 hover:shadow-lg hover:-translate-y-1">
                     {% if event.image %}
@@ -24,17 +26,17 @@
                             </svg>
                         </div>
                     {% endif %}
-                    
+
                     <div class="p-5">
                         <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ event.name }}</h2>
-                        
+
                         <div class="flex items-center text-gray-600 mb-2">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                             </svg>
                             <span>{{ event.date|date:"d/m/Y" }} alle {{ event.date|date:"H:i" }}</span>
                         </div>
-                        
+
                         <div class="flex items-center text-gray-600 mb-3">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
@@ -42,30 +44,30 @@
                             </svg>
                             <span>{{ event.location }}</span>
                         </div>
-                        
+
                         <div class="flex items-center text-gray-600 mb-4">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                             </svg>
-                            <span>{{ event.shelter.name }}</span>
+                            <span>Organizzato da: {{ event.shelter.name }}</span>
                         </div>
-                        
+
                         <p class="text-gray-600 mb-4 line-clamp-3">{{ event.description|truncatechars:150 }}</p>
-                        
+
                         <a href="{% url 'event-detail' event.pk %}" class="inline-block bg-amber-500 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300">
-                            Maggiori Dettagli
+                            Dettagli Evento
                         </a>
                     </div>
                 </div>
             {% endfor %}
         </div>
     {% else %}
-        <div class="bg-white rounded-lg shadow p-8 text-center">
+        <div class="bg-white rounded-lg shadow p-8 text-center mt-4">
             <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <h3 class="text-xl font-medium text-gray-800 mb-2">Nessun evento in programma</h3>
-            <p class="text-gray-600">Al momento non ci sono eventi futuri programmati. Torna a controllare più tardi!</p>
+            <h3 class="text-xl font-medium text-gray-800 mb-2">Non ci sono eventi imminenti</h3>
+            <p class="text-gray-600">Ti invitiamo a seguirci per futuri aggiornamenti sui nostri eventi.</p>
         </div>
     {% endif %}
 </div>
