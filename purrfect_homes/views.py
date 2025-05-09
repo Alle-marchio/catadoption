@@ -295,7 +295,7 @@ class EventDetailView(DetailView):
 class DonationCreateView(LoginRequiredMixin, CreateView):
     model = Donation
     form_class = DonationForm
-    template_name = 'cats/donation_form.html'
+    template_name = 'donation/donation_form.html'
     success_url = reverse_lazy('donation-thank-you')
 
     def form_valid(self, form):
@@ -309,7 +309,7 @@ class DonationCreateView(LoginRequiredMixin, CreateView):
 
 
 def donation_thank_you_view(request):
-    return render(request, 'cats/donation_thank_you.html')
+    return render(request, 'donation/donation_thank_you.html')
 
 
 # Staff views (for shelter staff and administrators)
