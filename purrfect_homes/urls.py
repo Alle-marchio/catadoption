@@ -19,7 +19,7 @@ urlpatterns = [
 
     # Shelter routes
     path('shelters/', views.ShelterListView.as_view(), name='shelter-list'),
-    path('shelters/<int:pk>/', views.ShelterDetailView.as_view(), name='shelter-detail'),
+     #path('shelters/<int:pk>/', views.ShelterDetailView.as_view(), name='shelter-detail'),
 
     # Blog routes
     path('blog/', views.PostListView.as_view(), name='post-list'),
@@ -31,7 +31,7 @@ urlpatterns = [
 
     # Donation routes
     path('donate/', views.DonationCreateView.as_view(), name='donation-create'),
-    path('donate/thank-you/', views.donation_thank_you_view, name='donation-thank-you'),
+    #path('donate/thank-you/', views.donation_thank_you_view, name='donation-thank-you'),
 
     # Staff routes
     path('staff/adoption-requests/', views.AdoptionRequestListView.as_view(), name='adoption-request-list'),

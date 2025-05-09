@@ -295,8 +295,8 @@ class EventDetailView(DetailView):
 class DonationCreateView(LoginRequiredMixin, CreateView):
     model = Donation
     form_class = DonationForm
-    template_name = 'cats/donation_form.html'
-    success_url = reverse_lazy('donation-thank-you')
+    template_name = 'donation/donation_form.html'
+    success_url = reverse_lazy('home')
 
     def form_valid(self, form):
         # Set donor if not anonymous
@@ -304,12 +304,12 @@ class DonationCreateView(LoginRequiredMixin, CreateView):
             form.instance.donor = self.request.user
 
         response = super().form_valid(form)
-        messages.success(self.request, _('Thank you for your donation!'))
+        messages.success(self.request, _('Grazie per la tua donazione!'))
         return response
 
 
 def donation_thank_you_view(request):
-    return render(request, 'cats/donation_thank_you.html')
+    return render(request, 'donation/donation_thank_you.html')
 
 
 # Staff views (for shelter staff and administrators)
