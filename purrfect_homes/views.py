@@ -248,7 +248,7 @@ class ShelterDetailView(DetailView):
 # Blog/Post Views
 class PostListView(ListView):
     model = Post
-    template_name = 'cats/post_list.html'
+    template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     paginate_by = 6
 
@@ -258,7 +258,7 @@ class PostListView(ListView):
 
 class PostDetailView(DetailView):
     model = Post
-    template_name = 'cats/post_detail.html'
+    template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
     def get_context_data(self, **kwargs):
