@@ -204,7 +204,7 @@ def user_profile_view(request):
 # Shelter Views
 class ShelterListView(ListView):
     model = Shelter
-    template_name = 'cats/shelter_list.html'
+    template_name = 'shelter/shelter_list.html'
     context_object_name = 'shelters'
 
     def get_context_data(self, **kwargs):
@@ -223,7 +223,7 @@ class ShelterListView(ListView):
 
 class ShelterDetailView(DetailView):
     model = Shelter
-    template_name = 'cats/shelter_detail.html'
+    template_name = 'shelter/shelter_detail.html'
     context_object_name = 'shelter'
 
     def get_context_data(self, **kwargs):
