@@ -45,7 +45,7 @@
                 <h3 class="text-xl font-bold mb-2">{{ cat.name }}</h3>
                 <p class="text-gray-600 mb-2">{{ cat.breed|default:"Meticcio" }}{% if cat.formatted_age %}, {{ cat.formatted_age }}{% endif %}</p>
                 <p class="mb-4 line-clamp-2">{{ cat.description|truncatechars:100 }}</p>
-                <a href="{% url 'cat-detail' cat.pk %}" class="block text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition">View Details</a>
+                <a href="{% url 'cat-detail' cat.pk %}" class="block text-center bg-purple-600 text-white py-2 rounded hover:bg-purple-700 transition">Vedi dettagli</a>
             </div>
         </div>
         {% empty %}
@@ -54,7 +54,7 @@
     </div>
 
     <!-- Latest news -->
-    <h2 class="text-3xl font-bold mb-6">Latest News</h2>
+    <h2 class="text-3xl font-bold mb-6">Ultime notizie</h2>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         {% for post in latest_posts %}
         <div class="bg-white rounded-lg shadow overflow-hidden">
