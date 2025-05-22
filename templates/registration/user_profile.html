@@ -99,7 +99,7 @@
                                         {% if request.notes %}
                                             <p class="mb-2"><span class="font-semibold">Note dello staff:</span> {{ request.notes|truncatechars:100 }}</p>
                                         {% endif %}
-                                        <a href="{% url 'cat-detail' request.cat.id %}" class="mt-2 inline-block px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Scopri di più su {{ request.cat.name }}</a>
+                                        <a href="{% url 'cat-detail' request.cat.id %}" class="mt-2 inline-block px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Dettagli su {{ request.cat.name }}</a>
                                     </div>
                                 </div>
                             </div>
