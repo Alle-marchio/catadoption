@@ -31,7 +31,6 @@ urlpatterns = [
 
     # Donation routes
     path('donate/', views.DonationCreateView.as_view(), name='donation-create'),
-    #path('donate/thank-you/', views.donation_thank_you_view, name='donation-thank-you'),
 
     # Staff routes
     path('staff/adoption-requests/', views.AdoptionRequestListView.as_view(), name='adoption-request-list'),
