@@ -45,20 +45,13 @@
     <!-- Tab Navigation -->
     <div class="mb-6 border-b border-gray-200">
         <ul class="flex flex-wrap -mb-px" id="profileTabs" role="tablist">
-            {% if user.role in 'admin,staff' %}
+            {% if user.role == 'admin' or user.role == 'staff' %}
                 <!-- Tab per Staff/Admin -->
                 <li class="mr-2">
                     <button class="inline-block py-4 px-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active"
                            id="staff-dashboard-tab" data-tabs-target="#staff-dashboard" type="button" role="tab"
                            aria-controls="staff-dashboard" aria-selected="true">
                         Gestione Richieste
-                    </button>
-                </li>
-                <li class="mr-2">
-                    <button class="inline-block py-4 px-4 text-gray-500 hover:text-gray-600 hover:border-gray-300 border-b-2 border-transparent rounded-t-lg"
-                           id="adoption-stats-tab" data-tabs-target="#adoption-stats" type="button" role="tab"
-                           aria-controls="adoption-stats" aria-selected="false">
-                        Statistiche
                     </button>
                 </li>
             {% else %}
@@ -89,7 +82,7 @@
     </div>
 
     <div id="tabContent">
-        {% if user.role in 'admin,staff' %}
+        {% if user.role == 'admin' or user.role == 'staff' %}
             <!-- STAFF DASHBOARD -->
             <div class="block" id="staff-dashboard" role="tabpanel" aria-labelledby="staff-dashboard-tab">
                 <!-- Riepilogo veloce -->
@@ -103,7 +96,7 @@
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-yellow-800">In Attesa</p>
-                                <p class="text-2xl font-bold text-yellow-900">{{ pending_requests_count }}</p>
+                                <p class="text-2xl font-bold text-yellow-900">{{ pending_requests_count|default:0 }}</p>
                             </div>
                         </div>
                     </div>
@@ -116,7 +109,7 @@
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-green-800">Approvate</p>
-                                <p class="text-2xl font-bold text-green-900">{{ approved_requests_count }}</p>
+                                <p class="text-2xl font-bold text-green-900">{{ approved_requests_count|default:0 }}</p>
                             </div>
                         </div>
                     </div>
@@ -129,7 +122,7 @@
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-red-800">Rifiutate</p>
-                                <p class="text-2xl font-bold text-red-900">{{ rejected_requests_count }}</p>
+                                <p class="text-2xl font-bold text-red-900">{{ rejected_requests_count|default:0 }}</p>
                             </div>
                         </div>
                     </div>
@@ -142,7 +135,7 @@
                             </div>
                             <div class="ml-3">
                                 <p class="text-sm font-medium text-blue-800">Totali</p>
-                                <p class="text-2xl font-bold text-blue-900">{{ total_requests_count }}</p>
+                                <p class="text-2xl font-bold text-blue-900">{{ total_requests_count|default:0 }}</p>
                             </div>
                         </div>
                     </div>
@@ -150,7 +143,7 @@
 
                 <!-- Link alla gestione completa -->
                 <div class="mb-6">
-                    <a href="{% url 'adoption-request-list' %}"
+                    <a href="{% url 'adoption-requests' %}"
                        class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                         Vai alla Gestione Completa delle Richieste
                     </a>
@@ -194,12 +187,12 @@
                                             {% if request.status == 'pending' %}
                                                 <div class="flex space-x-1">
                                                     <a href="{% url 'approve-adoption-request' request.id %}"
-                                                       class="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700"
+                                                       class="px-3 py-1 text-xs bg-green-600 text-white rounded hover:bg-green-700 transition-colors"
                                                        onclick="return confirm('Sei sicuro di voler approvare questa richiesta?')">
                                                         Approva
                                                     </a>
                                                     <a href="{% url 'reject-adoption-request' request.id %}"
-                                                       class="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700"
+                                                       class="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
                                                        onclick="return confirm('Sei sicuro di voler rifiutare questa richiesta?')">
                                                         Rifiuta
                                                     </a>
@@ -216,60 +209,8 @@
                 </div>
             </div>
 
-            <!-- STATISTICHE -->
-            <div class="hidden" id="adoption-stats" role="tabpanel" aria-labelledby="adoption-stats-tab">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Statistiche mensili -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-lg font-semibold mb-4">Statistiche Mensili</h3>
-                        <div class="space-y-3">
-                            <div class="flex justify-between">
-                                <span>Richieste questo mese:</span>
-                                <span class="font-semibold">{{ monthly_requests }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Adozioni completate:</span>
-                                <span class="font-semibold text-green-600">{{ monthly_adoptions }}</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span>Tasso di successo:</span>
-                                <span class="font-semibold">{{ success_rate }}%</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Gatti più richiesti -->
-                    <div class="bg-white rounded-lg shadow-md p-6">
-                        <h3 class="text-lg font-semibold mb-4">Gatti Più Richiesti</h3>
-                        {% if popular_cats %}
-                            <div class="space-y-3">
-                                {% for cat in popular_cats %}
-                                    <div class="flex items-center space-x-3">
-                                        {% if cat.photos.exists %}
-                                            <img src="{{ cat.photos.first.image.url }}"
-                                                 alt="{{ cat.name }}"
-                                                 class="w-10 h-10 rounded-full object-cover">
-                                        {% else %}
-                                            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
-                                                <span class="text-gray-600 text-xs">🐱</span>
-                                            </div>
-                                        {% endif %}
-                                        <div class="flex-1">
-                                            <p class="font-medium">{{ cat.name }}</p>
-                                            <p class="text-sm text-gray-600">{{ cat.request_count }} richieste</p>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <p class="text-gray-500">Nessun dato disponibile</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-
         {% else %}
-            <!-- SEZIONI PER ADOPTER (codice originale) -->
+            <!-- SEZIONI PER ADOPTER -->
             <div class="block" id="adoption-requests" role="tabpanel" aria-labelledby="adoption-requests-tab">
                 {% if adoption_requests %}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -341,7 +282,7 @@
                                     </div>
                                 {% endif %}
                                 <div class="p-4">
-                                    <p class="mb-2"><span class="font-semibold">Età:</span> {{ cat.formatted_age }}</p>
+                                    <p class="mb-2"><span class="font-semibold">Età:</span> {{ cat.formatted_age|default:cat.age }}</p>
                                     <p class="mb-2"><span class="font-semibold">Razza:</span> {{ cat.breed|default:"Misto" }}</p>
                                     <p class="mb-2"><span class="font-semibold">Carattere:</span> {{ cat.personality|truncatechars:50 }}</p>
                                     <div class="mt-4">
@@ -362,7 +303,7 @@
             <div class="hidden" id="donations" role="tabpanel" aria-labelledby="donations-tab">
                 {% if donations %}
                     <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white">
+                        <table class="min-w-full bg-white rounded-lg shadow-md">
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th class="py-3 px-4 text-left">Data</th>
@@ -402,7 +343,7 @@
                         </table>
                     </div>
                     <div class="mt-6">
-                        <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Fai un'altra donazione</a>
+                        <a href="{% url 'donation-create' %}" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Fai una nuova donazione</a>
                     </div>
                 {% else %}
                     <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
@@ -414,55 +355,4 @@
         {% endif %}
     </div>
 </div>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-    // Funzionalità delle tab
-    document.addEventListener('DOMContentLoaded', function() {
-        const tabButtons = document.querySelectorAll('[data-tabs-target]');
-        const tabContents = document.querySelectorAll('#tabContent > div');
-
-        // Verifica se c'è un hash nell'URL
-        const hash = window.location.hash;
-        if (hash) {
-            const targetTab = document.querySelector(`[data-tabs-target="${hash}"]`);
-            if (targetTab) attivaTab(targetTab);
-        }
-
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                attivaTab(button);
-                // Aggiorna l'hash nell'URL
-                const targetId = button.getAttribute('data-tabs-target');
-                window.location.hash = targetId;
-            });
-        });
-
-        function attivaTab(clickedButton) {
-            // Disattiva tutte le tab
-            tabButtons.forEach(btn => {
-                btn.classList.remove('text-blue-600', 'border-blue-600');
-                btn.classList.add('text-gray-500', 'border-transparent');
-                btn.setAttribute('aria-selected', 'false');
-            });
-
-            // Nascondi tutti i contenuti
-            tabContents.forEach(content => {
-                content.classList.add('hidden');
-                content.classList.remove('block');
-            });
-
-            // Attiva la tab cliccata
-            clickedButton.classList.remove('text-gray-500', 'border-transparent');
-            clickedButton.classList.add('text-blue-600', 'border-blue-600');
-            clickedButton.setAttribute('aria-selected', 'true');
-
-            // Mostra il contenuto corrispondente
-            const target = document.querySelector(clickedButton.getAttribute('data-tabs-target'));
-            target.classList.remove('hidden');
-            target.classList.add('block');
-        }
-    });
-</script>
 {% endblock %}

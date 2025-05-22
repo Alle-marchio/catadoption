@@ -177,29 +177,59 @@ class AdoptionRequestCreateView(LoginRequiredMixin, CreateView):
         # Recupera il gatto dal database usando l'ID nell'URL
         context['cat'] = get_object_or_404(Cat, pk=self.kwargs['cat_id'])
         return context
+
+
 @login_required
 def user_profile_view(request):
-    # Get user's adoption requests
-    adoption_requests = AdoptionRequest.objects.filter(user=request.user)
+    user = request.user
+    context = {}
 
-    # Get user's adopted cats
-    adopted_cats = Cat.objects.filter(
-        adoption_requests__user=request.user,
-        adoption_requests__status='approved',
-        adoption_status='adopted'
-    )
+    if user.role in ['admin', 'staff']:
+        # STAFF/ADMIN DASHBOARD
 
-    # Get user's donations
-    donations = Donation.objects.filter(donor=request.user)
+        # Statistiche delle richieste
+        if user.role == 'admin':
+            # Admin può vedere tutte le richieste
+            all_requests = AdoptionRequest.objects.all()
+        else:
+            # Staff vede solo le richieste per i gatti dei rifugi dove lavora
+            all_requests = AdoptionRequest.objects.filter(
+                cat__shelter__staff=user
+            )
 
-    context = {
-        'adoption_requests': adoption_requests,
-        'adopted_cats': adopted_cats,
-        'donations': donations,
-    }
+        # Contatori per le statistiche sbagliatooooooooo
+        context['pending_requests_count'] = all_requests.filter(status='pending').count()
+        context['approved_requests_count'] = all_requests.filter(status='approved').count()
+        context['rejected_requests_count'] = all_requests.filter(status='rejected').count()
+        context['total_requests_count'] = all_requests.count()
+
+        # Richieste recenti (ultime 10)
+        context['recent_requests'] = all_requests.select_related(
+            'user', 'cat'
+        ).prefetch_related('cat__photos').order_by('-request_date')[:3]
+
+
+    else:
+        # SEZIONE ADOPTER (utenti normali)
+
+        # Richieste di adozione dell'utente
+        context['adoption_requests'] = AdoptionRequest.objects.filter(
+            user=user
+        ).select_related('cat').prefetch_related('cat__photos').order_by('-request_date')
+
+        # Gatti adottati dall'utente
+        context['adopted_cats'] = Cat.objects.filter(
+            adoption_requests__user=user,
+            adoption_requests__status='approved',
+            adoption_status='adopted'
+        ).prefetch_related('photos').distinct()
+
+        # Donazioni dell'utente
+        context['donations'] = Donation.objects.filter(
+            donor=user
+        ).select_related('shelter').order_by('-date')
 
     return render(request, 'registration/user_profile.html', context)
-
 
 # Shelter Views
 class ShelterListView(ListView):
@@ -325,7 +355,7 @@ class StaffRequiredMixin(UserPassesTestMixin):
 
 class AdoptionRequestListView(StaffRequiredMixin, ListView):
     model = AdoptionRequest
-    template_name = 'cats/staff/adoption_request_list.html'
+    template_name = 'staff/adoption_requests.html'
     context_object_name = 'requests'
 
     def get_queryset(self):

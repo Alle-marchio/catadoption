@@ -1,0 +1,21 @@
+<h1>Richieste di Adozione</h1>
+<table>
+  <tr>
+    <th>Gatto</th>
+    <th>Richiedente</th>
+    <th>Data richiesta</th>
+    <th>Stato</th>
+    <th>Azioni</th>
+  </tr>
+  {% for req in requests %}
+    <tr>
+      <td>{{ req.cat.name }}</td>
+      <td>{{ req.user.username }}</td>
+      <td>{{ req.request_date }}</td>
+      <td>{{ req.get_status_display }}</td>
+      <td><a href="{% url 'adoption_request_detail' req.id %}">Dettagli</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5">Nessuna richiesta trovata.</td></tr>
+  {% endfor %}
+</table>
