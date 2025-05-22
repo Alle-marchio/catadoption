@@ -1,21 +1,239 @@
-<h1>Richieste di Adozione</h1>
-<table>
-  <tr>
-    <th>Gatto</th>
-    <th>Richiedente</th>
-    <th>Data richiesta</th>
-    <th>Stato</th>
-    <th>Azioni</th>
-  </tr>
-  {% for req in requests %}
-    <tr>
-      <td>{{ req.cat.name }}</td>
-      <td>{{ req.user.username }}</td>
-      <td>{{ req.request_date }}</td>
-      <td>{{ req.get_status_display }}</td>
-      <td><a href="{% url 'adoption_request_detail' req.id %}">Dettagli</a></td>
-    </tr>
-  {% empty %}
-    <tr><td colspan="5">Nessuna richiesta trovata.</td></tr>
-  {% endfor %}
-</table>
+{% extends 'base.html' %}
+
+{% block title %}Richieste di Adozione - Staff Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Richieste di Adozione</h1>
+        <p class="text-gray-600">Gestisci le richieste di adozione in sospeso</p>
+    </div>
+
+    <!-- Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-yellow-100">
+                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">In Attesa</p>
+                    <p class="text-2xl font-bold text-gray-900">
+                        {% for request in requests %}{% if request.status == 'pending' %}{{ forloop.counter0|add:1 }}{% endif %}{% empty %}0{% endfor %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-green-100">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Totale Richieste</p>
+                    <p class="text-2xl font-bold text-gray-900">{{ requests|length }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="flex items-center">
+                <div class="p-3 rounded-full bg-purple-100">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-600">Gatti Disponibili</p>
+                    <p class="text-2xl font-bold text-gray-900">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Requests List -->
+    {% if requests %}
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900">Richieste in Sospeso</h2>
+            </div>
+            
+            <div class="divide-y divide-gray-200">
+                {% for request in requests %}
+                    {% if request.status == 'pending' %}
+                    <div class="p-6">
+                        <div class="flex items-start space-x-4">
+                            <!-- Cat Photo -->
+                            <div class="flex-shrink-0">
+                                {% if request.cat.photos.all %}
+                                    <img src="{{ request.cat.photos.first.image.url }}" 
+                                         alt="{{ request.cat.name }}"
+                                         class="w-24 h-24 rounded-lg object-cover">
+                                {% else %}
+                                    <div class="w-24 h-24 rounded-lg bg-gray-200 flex items-center justify-center">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Request Details -->
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div>
+                                        <h3 class="text-xl font-semibold text-gray-900">{{ request.cat.name }}</h3>
+                                        <p class="text-sm text-gray-600">
+                                            {{ request.cat.formatted_age }} • 
+                                            {% if request.cat.gender == 'M' %}Maschio{% else %}Femmina{% endif %} • 
+                                            {{ request.cat.breed|default:"Meticcio" }}
+                                        </p>
+                                    </div>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                        In Attesa
+                                    </span>
+                                </div>
+                                
+                                <!-- Adopter Info -->
+                                <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                                    <h4 class="font-medium text-gray-900 mb-2">Informazioni Richiedente</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                        <div>
+                                            <span class="font-medium text-gray-700">Nome:</span>
+                                            <span class="text-gray-600 ml-1">{{ request.user.first_name }} {{ request.user.last_name }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Username:</span>
+                                            <span class="text-gray-600 ml-1">{{ request.user.username }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Email:</span>
+                                            <span class="text-gray-600 ml-1">{{ request.user.email }}</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium text-gray-700">Telefono:</span>
+                                            <span class="text-gray-600 ml-1">{{ request.user.phone|default:"Non fornito" }}</span>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <span class="font-medium text-gray-700">Data richiesta:</span>
+                                            <span class="text-gray-600 ml-1">{{ request.request_date|date:"d/m/Y H:i" }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Request Details -->
+                                <div class="space-y-4">
+                                    <div>
+                                        <h5 class="font-medium text-gray-900 mb-1">Situazione Abitativa</h5>
+                                        <p class="text-sm text-gray-600 bg-white p-3 rounded border">{{ request.living_situation }}</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <h5 class="font-medium text-gray-900 mb-1">Esperienza con Animali</h5>
+                                        <p class="text-sm text-gray-600 bg-white p-3 rounded border">{{ request.experience }}</p>
+                                    </div>
+                                    
+                                    <div>
+                                        <h5 class="font-medium text-gray-900 mb-1">Motivo dell'Adozione</h5>
+                                        <p class="text-sm text-gray-600 bg-white p-3 rounded border">{{ request.reason }}</p>
+                                    </div>
+                                    
+                                    {% if request.notes %}
+                                    <div>
+                                        <h5 class="font-medium text-gray-900 mb-1">Note Aggiuntive</h5>
+                                        <p class="text-sm text-gray-600 bg-white p-3 rounded border">{{ request.notes }}</p>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="flex space-x-4 mt-6 pt-4 border-t border-gray-200">
+                                    <a href="{% url 'approve_adoption_request' request.id %}" 
+                                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                                       onclick="return confirm('Sei sicuro di voler approvare questa richiesta di adozione?')">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Approva Richiesta
+                                    </a>
+                                    
+                                    <a href="{% url 'reject_adoption_request' request.id %}" 
+                                       class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                                       onclick="return confirm('Sei sicuro di voler rifiutare questa richiesta di adozione?')">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                        Rifiuta Richiesta
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Historical Requests (if any) -->
+        {% if requests|length > 0 %}
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Richieste Processate</h2>
+            <div class="bg-white rounded-lg shadow overflow-hidden">
+                <div class="divide-y divide-gray-200">
+                    {% for request in requests %}
+                        {% if request.status != 'pending' %}
+                        <div class="p-4 {% if request.status == 'approved' %}bg-green-50{% elif request.status == 'rejected' %}bg-red-50{% endif %}">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    {% if request.cat.photos.all %}
+                                        <img src="{{ request.cat.photos.first.image.url }}" 
+                                             alt="{{ request.cat.name }}"
+                                             class="w-12 h-12 rounded-lg object-cover">
+                                    {% else %}
+                                        <div class="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <p class="font-medium text-gray-900">{{ request.cat.name }}</p>
+                                        <p class="text-sm text-gray-600">{{ request.user.username }} • {{ request.request_date|date:"d/m/Y" }}</p>
+                                    </div>
+                                </div>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {% if request.status == 'approved' %}bg-green-100 text-green-800
+                                    {% elif request.status == 'rejected' %}bg-red-100 text-red-800
+                                    {% endif %}">
+                                    {% if request.status == 'approved' %}Approvata
+                                    {% elif request.status == 'rejected' %}Rifiutata
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+    {% else %}
+        <!-- Empty State -->
+        <div class="bg-white rounded-lg shadow p-12 text-center">
+            <svg xmlns="http://www.w3.org/2000/svg"class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 3.75H6.912a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H15M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859M12 3v8.25m0 0-3-3m3 3 3-3" />
+            </svg>
+
+            <h3 class="text-lg font-medium text-gray-900 mb-2">Nessuna richiesta trovata</h3>
+            <p class="text-gray-600">Non ci sono richieste di adozione al momento.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
