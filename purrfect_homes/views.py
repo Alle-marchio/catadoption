@@ -368,15 +368,10 @@ class AdoptionRequestListView(StaffRequiredMixin, ListView):
 @login_required
 def approve_adoption_request(request, request_id):
     if not (request.user.role in ['admin', 'staff'] or request.user.is_superuser):
-        messages.error(request, _('You do not have permission to perform this action.'))
+        messages.error(request, _('Non hai i permessi per compiere questa azione.'))
         return redirect('home')
 
     adoption_request = get_object_or_404(AdoptionRequest, pk=request_id)
-
-    # Check if user has permission to approve this request
-    if request.user.role == 'staff' and request.user not in adoption_request.cat.shelter.staff.all():
-        messages.error(request, _('You do not have permission to approve this request.'))
-        return redirect('adoption-request-list')
 
     # Update request status
     adoption_request.status = 'approved'
@@ -395,22 +390,17 @@ def approve_adoption_request(request, request_id):
         follow_up_date=timezone.now().date() + timedelta(days=30)
     )
 
-    messages.success(request, _('Adoption request approved successfully.'))
-    return redirect('adoption-request-list')
+    messages.success(request, _('Richiesta di adozione approvata correttamente.'))
+    return redirect('user-profile')
 
 
 @login_required
 def reject_adoption_request(request, request_id):
     if not (request.user.role in ['admin', 'staff'] or request.user.is_superuser):
-        messages.error(request, _('You do not have permission to perform this action.'))
+        messages.error(request, _('Non hai i permessi per compiere questa azione.'))
         return redirect('home')
 
     adoption_request = get_object_or_404(AdoptionRequest, pk=request_id)
-
-    # Check if user has permission to reject this request
-    if request.user.role == 'staff' and request.user not in adoption_request.cat.shelter.staff.all():
-        messages.error(request, _('You do not have permission to reject this request.'))
-        return redirect('adoption-request-list')
 
     # Update request status
     adoption_request.status = 'rejected'
@@ -422,5 +412,5 @@ def reject_adoption_request(request, request_id):
         cat.adoption_status = 'available'
         cat.save()
 
-    messages.success(request, _('Adoption request rejected.'))
-    return redirect('adoption-request-list')
+    messages.success(request, _('richiesta di adizione rifiutata.'))
+    return redirect('user-profile')
