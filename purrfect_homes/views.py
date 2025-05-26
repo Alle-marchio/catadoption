@@ -185,17 +185,10 @@ def user_profile_view(request):
     context = {}
 
     if user.role in ['admin', 'staff']:
-        # STAFF/ADMIN DASHBOARD
 
         # Statistiche delle richieste
-        if user.role == 'admin':
-            # Admin può vedere tutte le richieste
+        if user.role in ['admin','staff']:
             all_requests = AdoptionRequest.objects.all()
-        else:
-            # Staff vede solo le richieste per i gatti dei rifugi dove lavora
-            all_requests = AdoptionRequest.objects.filter(
-                cat__shelter__staff=user
-            )
 
         # Contatori per le statistiche sbagliatooooooooo
         context['pending_requests_count'] = all_requests.filter(status='pending').count()
@@ -203,7 +196,7 @@ def user_profile_view(request):
         context['rejected_requests_count'] = all_requests.filter(status='rejected').count()
         context['total_requests_count'] = all_requests.count()
 
-        # Richieste recenti (ultime 10)
+        # Richieste recenti (ultime 3)
         context['recent_requests'] = all_requests.select_related(
             'user', 'cat'
         ).prefetch_related('cat__photos').order_by('-request_date')[:3]
