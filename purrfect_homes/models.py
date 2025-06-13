@@ -120,9 +120,9 @@ class AdoptionRequest(models.Model):
     request_date = models.DateTimeField(_('Request date'), auto_now_add=True)
     status = models.CharField(_('Status'), max_length=10, choices=STATUS_CHOICES, default='pending')
     notes = models.TextField(_('Notes'), blank=True)
-    living_situation = models.TextField(_('Living situation'), help_text=_('Describe your home, yard, etc.'))
-    experience = models.TextField(_('Experience with pets'), help_text=_('Previous experience with pets'))
-    reason = models.TextField(_('Reason for adoption'), help_text=_('Why do you want to adopt this cat?'))
+    living_situation = models.TextField(_('Living situation'), help_text=_('Descrivi la tua situazione abitativa'))
+    experience = models.TextField(_('Experience with pets'), help_text=_('Hai esperienza con gli animali?'))
+    reason = models.TextField(_('Reason for adoption'), help_text=_('Perché vuoi adottare questo gatto?'))
 
     def __str__(self):
         return f"Request for {self.cat.name} by {self.user.username}"

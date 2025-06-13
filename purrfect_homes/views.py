@@ -177,29 +177,49 @@ class AdoptionRequestCreateView(LoginRequiredMixin, CreateView):
         # Recupera il gatto dal database usando l'ID nell'URL
         context['cat'] = get_object_or_404(Cat, pk=self.kwargs['cat_id'])
         return context
+
+
 @login_required
 def user_profile_view(request):
-    # Get user's adoption requests
-    adoption_requests = AdoptionRequest.objects.filter(user=request.user)
+    user = request.user
+    context = {}
 
-    # Get user's adopted cats
-    adopted_cats = Cat.objects.filter(
-        adoption_requests__user=request.user,
-        adoption_requests__status='approved',
-        adoption_status='adopted'
-    )
+    if user.role in ['admin', 'staff']:
 
-    # Get user's donations
-    donations = Donation.objects.filter(donor=request.user)
+        all_requests = AdoptionRequest.objects.all()
 
-    context = {
-        'adoption_requests': adoption_requests,
-        'adopted_cats': adopted_cats,
-        'donations': donations,
-    }
+        context['pending_requests_count'] = all_requests.filter(status='pending').count()
+        context['approved_requests_count'] = all_requests.filter(status='approved').count()
+        context['rejected_requests_count'] = all_requests.filter(status='rejected').count()
+        context['total_requests_count'] = all_requests.count()
+
+        # Richieste recenti (ultime 3)
+        context['recent_requests'] = all_requests.select_related(
+            'user', 'cat'
+        ).prefetch_related('cat__photos').order_by('-request_date')[:3]
+
+
+    else:
+        # SEZIONE ADOPTER (utenti normali)
+
+        # Richieste di adozione dell'utente
+        context['adoption_requests'] = AdoptionRequest.objects.filter(
+            user=user
+        ).select_related('cat').prefetch_related('cat__photos').order_by('-request_date')
+
+        # Gatti adottati dall'utente
+        context['adopted_cats'] = Cat.objects.filter(
+            adoption_requests__user=user,
+            adoption_requests__status='approved',
+            adoption_status='adopted'
+        ).prefetch_related('photos').distinct()
+
+        # Donazioni dell'utente
+        context['donations'] = Donation.objects.filter(
+            donor=user
+        ).select_related('shelter').order_by('-date')
 
     return render(request, 'registration/user_profile.html', context)
-
 
 # Shelter Views
 class ShelterListView(ListView):
@@ -325,35 +345,38 @@ class StaffRequiredMixin(UserPassesTestMixin):
 
 class AdoptionRequestListView(StaffRequiredMixin, ListView):
     model = AdoptionRequest
-    template_name = 'cats/staff/adoption_request_list.html'
+    template_name = 'staff/adoption_requests.html'
     context_object_name = 'requests'
 
     def get_queryset(self):
         # Filter by shelter for staff users
         user = self.request.user
 
-        if user.role == 'admin' or user.is_superuser:
-            # Admins can see all requests
-            return AdoptionRequest.objects.all().order_by('-request_date')
-        else:
-            # Staff can only see requests for cats in their shelters
-            return AdoptionRequest.objects.filter(
-                cat__shelter__staff=user
-            ).order_by('-request_date')
+        if user.role in ['admin', 'staff'] or user.is_superuser:
+            return AdoptionRequest.objects.all().select_related('user', 'cat', 'cat__shelter').prefetch_related(
+                'cat__photos').order_by('-request_date')
 
+            # Fallback per altri ruoli (anche se non dovrebbero accedere)
+        return AdoptionRequest.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        requests = self.get_queryset()
+
+        context['pending_count'] = requests.filter(status='pending').count()
+        context['approved_count'] = requests.filter(status='approved').count()
+        context['rejected_count'] = requests.filter(status='rejected').count()
+        context['total_count'] = requests.count()
+
+        return context
 
 @login_required
 def approve_adoption_request(request, request_id):
     if not (request.user.role in ['admin', 'staff'] or request.user.is_superuser):
-        messages.error(request, _('You do not have permission to perform this action.'))
+        messages.error(request, _('Non hai i permessi per compiere questa azione.'))
         return redirect('home')
 
     adoption_request = get_object_or_404(AdoptionRequest, pk=request_id)
-
-    # Check if user has permission to approve this request
-    if request.user.role == 'staff' and request.user not in adoption_request.cat.shelter.staff.all():
-        messages.error(request, _('You do not have permission to approve this request.'))
-        return redirect('adoption-request-list')
 
     # Update request status
     adoption_request.status = 'approved'
@@ -372,22 +395,17 @@ def approve_adoption_request(request, request_id):
         follow_up_date=timezone.now().date() + timedelta(days=30)
     )
 
-    messages.success(request, _('Adoption request approved successfully.'))
-    return redirect('adoption-request-list')
+    messages.success(request, _('Richiesta di adozione approvata correttamente.'))
+    return redirect('user-profile')
 
 
 @login_required
 def reject_adoption_request(request, request_id):
     if not (request.user.role in ['admin', 'staff'] or request.user.is_superuser):
-        messages.error(request, _('You do not have permission to perform this action.'))
+        messages.error(request, _('Non hai i permessi per compiere questa azione.'))
         return redirect('home')
 
     adoption_request = get_object_or_404(AdoptionRequest, pk=request_id)
-
-    # Check if user has permission to reject this request
-    if request.user.role == 'staff' and request.user not in adoption_request.cat.shelter.staff.all():
-        messages.error(request, _('You do not have permission to reject this request.'))
-        return redirect('adoption-request-list')
 
     # Update request status
     adoption_request.status = 'rejected'
@@ -399,5 +417,5 @@ def reject_adoption_request(request, request_id):
         cat.adoption_status = 'available'
         cat.save()
 
-    messages.success(request, _('Adoption request rejected.'))
-    return redirect('adoption-request-list')
+    messages.success(request, _('richiesta di adizione rifiutata.'))
+    return redirect('user-profile')

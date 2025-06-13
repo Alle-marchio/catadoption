@@ -33,7 +33,7 @@ urlpatterns = [
     path('donate/', views.DonationCreateView.as_view(), name='donation-create'),
 
     # Staff routes
-    path('staff/adoption-requests/', views.AdoptionRequestListView.as_view(), name='adoption-request-list'),
+    path('staff/adoption-requests/', views.AdoptionRequestListView.as_view(), name='adoption-requests'),
     path('staff/adoption-requests/<uuid:request_id>/approve/',
          views.approve_adoption_request, name='approve-adoption-request'),
     path('staff/adoption-requests/<uuid:request_id>/reject/',
