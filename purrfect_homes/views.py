@@ -186,11 +186,8 @@ def user_profile_view(request):
 
     if user.role in ['admin', 'staff']:
 
-        # Statistiche delle richieste
-        if user.role in ['admin','staff']:
-            all_requests = AdoptionRequest.objects.all()
+        all_requests = AdoptionRequest.objects.all()
 
-        # Contatori per le statistiche sbagliatooooooooo
         context['pending_requests_count'] = all_requests.filter(status='pending').count()
         context['approved_requests_count'] = all_requests.filter(status='approved').count()
         context['rejected_requests_count'] = all_requests.filter(status='rejected').count()
@@ -355,15 +352,23 @@ class AdoptionRequestListView(StaffRequiredMixin, ListView):
         # Filter by shelter for staff users
         user = self.request.user
 
-        if user.role == 'admin' or user.is_superuser:
-            # Admins can see all requests
-            return AdoptionRequest.objects.all().order_by('-request_date')
-        else:
-            # Staff can only see requests for cats in their shelters
-            return AdoptionRequest.objects.filter(
-                cat__shelter__staff=user
-            ).order_by('-request_date')
+        if user.role in ['admin', 'staff'] or user.is_superuser:
+            return AdoptionRequest.objects.all().select_related('user', 'cat', 'cat__shelter').prefetch_related(
+                'cat__photos').order_by('-request_date')
 
+            # Fallback per altri ruoli (anche se non dovrebbero accedere)
+        return AdoptionRequest.objects.none()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        requests = self.get_queryset()
+
+        context['pending_count'] = requests.filter(status='pending').count()
+        context['approved_count'] = requests.filter(status='approved').count()
+        context['rejected_count'] = requests.filter(status='rejected').count()
+        context['total_count'] = requests.count()
+
+        return context
 
 @login_required
 def approve_adoption_request(request, request_id):
