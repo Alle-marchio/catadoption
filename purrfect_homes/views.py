@@ -350,9 +350,6 @@ class CatCreateView(StaffRequiredMixin, CreateView):
     success_url = reverse_lazy('cat-list')
 
     def form_valid(self, form):
-        # Se l'utente è staff, imposta automaticamente il suo shelter
-        if self.request.user.role == ['staff','admin']:
-            form.instance.shelter = self.request.user.shelter
 
         # Salva prima il gatto
         response = super().form_valid(form)
