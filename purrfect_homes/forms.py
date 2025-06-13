@@ -196,9 +196,22 @@ class CatFilterForm(forms.Form):
 
 
 class CatCreateForm(forms.ModelForm):
+    # Campo aggiuntivo per la foto
+    photo = forms.ImageField(
+        required=False,
+        label="Foto del gatto",
+        widget=forms.ClearableFileInput(attrs={
+            'accept': 'image/*',
+        })
+    )
+
     class Meta:
         model = Cat
-        fields = '__all__'
+        fields = [
+            'name', 'age', 'birth_date', 'gender', 'breed', 'color',
+            'description', 'health_status', 'vaccinated', 'neutered',
+            'history', 'personality', 'arrival_date', 'adoption_status', 'shelter'
+        ]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'age': forms.NumberInput(attrs={'class': 'form-control'}),
