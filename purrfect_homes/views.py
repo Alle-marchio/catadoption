@@ -17,7 +17,7 @@ from .models import (
     AdoptionRequest, Adoption, Post, Event, Donation
 )
 from .forms import (
-    AdoptionRequestForm, DonationForm,
+    AdoptionRequestForm, DonationForm, CatCreateForm
     # Assumo che creerai questi form
 )
 
@@ -342,6 +342,33 @@ class StaffRequiredMixin(UserPassesTestMixin):
                 self.request.user.is_superuser
         )
 
+
+class CatCreateView(StaffRequiredMixin, CreateView):
+    model = Cat
+    form_class = CatCreateForm
+    template_name = 'staff/cat_create_form.html'
+    success_url = reverse_lazy('cat-list')
+
+    def form_valid(self, form):
+
+        # Salva prima il gatto
+        response = super().form_valid(form)
+
+        # Gestisce l'upload della foto se presente
+        photo = form.cleaned_data.get('photo')
+        if photo:
+            CatPhoto.objects.create(
+                cat=self.object,
+                image=photo,
+                is_primary=True,
+                caption=f"Foto di {self.object.name}"
+            )
+
+        messages.success(
+            self.request,
+            f'Il gatto "{self.object.name}" è stato aggiunto con successo!'
+        )
+        return response
 
 class AdoptionRequestListView(StaffRequiredMixin, ListView):
     model = AdoptionRequest
