@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.views.generic.edit import FormView
+#from django.views.generic.edit import FormView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy, reverse
@@ -18,25 +18,16 @@ from .models import (
 )
 from .forms import (
     AdoptionRequestForm, DonationForm, CatCreateForm
-    # Assumo che creerai questi form
 )
 
 
 # Home view
 def home_view(request):
-    # Get cats available for adoption (limit to 3)
     available_cats = Cat.objects.filter(adoption_status='available').order_by('?')[:3]
-
-    # Get latest news/posts (limit to 3)
     latest_posts = Post.objects.filter(is_published=True).order_by('-published_date')[:3]
+    upcoming_events = Event.objects.filter( is_active=True, date__gte=timezone.now()).order_by('date')[:3]
 
-    # Get upcoming events (limit to 3)
-    upcoming_events = Event.objects.filter(
-        is_active=True,
-        date__gte=timezone.now()
-    ).order_by('date')[:3]
-
-    # Get adoption statistics
+    #statistiche
     adoption_stats = {
         'total_cats': Cat.objects.count(),
         'available_cats': Cat.objects.filter(adoption_status='available').count(),
@@ -59,7 +50,6 @@ class RegisterView(CreateView):
     template_name = 'registration/register.html'
 
     def form_valid(self, form):
-        # Imposta automaticamente il ruolo a 'adopter' per i nuovi utenti
         form.instance.role = 'adopter'
         return super().form_valid(form)
 
@@ -72,8 +62,6 @@ class CatListView(ListView):
 
     def get_queryset(self):
         queryset = Cat.objects.filter(adoption_status='available').select_related('shelter')
-
-        # Filter by search query if provided
         query = self.request.GET.get('q')
         if query:
             queryset = queryset.filter(
@@ -83,7 +71,7 @@ class CatListView(ListView):
                 Q(description__icontains=query)
             )
 
-        # Filter by age if provided
+        # Filter by age
         age_filter = self.request.GET.get('age')
         if age_filter:
             if age_filter == 'kitten':
@@ -93,12 +81,12 @@ class CatListView(ListView):
             elif age_filter == 'adult':
                 queryset = queryset.filter(age__gte=84)  # 7+ years
 
-        # Filter by gender if provided
+        # Filter by gender
         gender = self.request.GET.get('gender')
         if gender:
             queryset = queryset.filter(gender=gender)
 
-        # Filter by shelter if provided
+        # Filter by shelter
         shelter_id = self.request.GET.get('shelter')
         if shelter_id:
             queryset = queryset.filter(shelter_id=shelter_id)
@@ -240,31 +228,6 @@ class ShelterListView(ListView):
 
         return context
 
-'''
-class ShelterDetailView(DetailView):
-    model = Shelter
-    template_name = 'shelter/shelter_detail.html'
-    context_object_name = 'shelter'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        # Get available cats in this shelter
-        context['available_cats'] = Cat.objects.filter(
-            shelter=self.object,
-            adoption_status='available'
-        )
-
-        # Get upcoming events at this shelter
-        context['upcoming_events'] = Event.objects.filter(
-            shelter=self.object,
-            is_active=True,
-            date__gte=timezone.now()
-        ).order_by('date')[:5]
-
-        return context
-
-'''
 # Blog/Post Views
 class PostListView(ListView):
     model = Post
@@ -327,21 +290,14 @@ class DonationCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, _('Grazie per la tua donazione!'))
         return response
 
-'''
-def donation_thank_you_view(request):
-    return render(request, 'donation/donation_thank_you.html')
-'''
-
 # Staff views (for shelter staff and administrators)
 class StaffRequiredMixin(UserPassesTestMixin):
-    """Mixin to check if user is staff or admin"""
 
     def test_func(self):
         return self.request.user.is_authenticated and (
                 self.request.user.role in ['admin', 'staff'] or
                 self.request.user.is_superuser
         )
-
 
 class CatCreateView(StaffRequiredMixin, CreateView):
     model = Cat

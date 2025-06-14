@@ -51,11 +51,6 @@ class Cat(models.Model):
 
     def __str__(self):
         return self.name
-    """
-    # le query sono ordinate tramite l'id
-    class Meta:
-        ordering = ['id']
-    """
 
 
 class CustomUser(AbstractUser):

@@ -7,7 +7,6 @@ from .models import (
 
 
 class CustomUserCreationForm(UserCreationForm):
-    # Aggiunto campo per la foto di profilo (opzionale)
     photo = forms.ImageField(
         required=False,
         label="Foto di profilo",
@@ -19,7 +18,6 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        # Estesi i campi includendo 'photo'
         fields = (
             'username', 'email', 'first_name', 'last_name',
             'phone', 'address', 'photo',

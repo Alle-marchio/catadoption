@@ -30,6 +30,5 @@ urlpatterns = [
     path('', include('purrfect_homes.urls')),  # Include gli URL dell'app purrfect_homes
 ]
 
-# Aggiungi i percorsi per i file media in modalità debug
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

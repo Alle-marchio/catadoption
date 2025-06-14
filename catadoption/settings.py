@@ -27,14 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-#parte aggiunta il 30/04/25
 AUTH_USER_MODEL = 'purrfect_homes.CustomUser'
 
 # Configurazione media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-#fine riga aggiunta
 # Application definition
 
 INSTALLED_APPS = [
