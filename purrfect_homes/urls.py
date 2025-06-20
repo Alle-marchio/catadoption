@@ -18,7 +18,6 @@ urlpatterns = [
 
     # Shelter routes
     path('shelters/', views.ShelterListView.as_view(), name='shelter-list'),
-     #path('shelters/<int:pk>/', views.ShelterDetailView.as_view(), name='shelter-detail'),
 
     # Blog routes
     path('blog/', views.PostListView.as_view(), name='post-list'),

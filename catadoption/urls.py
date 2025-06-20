@@ -27,7 +27,7 @@ urlpatterns = [
 
     path('accounts/login/', auth_views.LoginView.as_view(form_class=CustomAuthenticationForm), name='login'),
     path('accounts/register/', RegisterView.as_view(), name='register'),
-    path('', include('purrfect_homes.urls')),  # Include gli URL dell'app purrfect_homes
+    path('', include('purrfect_homes.urls')),
 ]
 
 if settings.DEBUG:
