@@ -12,9 +12,9 @@ class Cat(models.Model):
     ]
 
     ADOPTION_STATUS = [
-        ('available', _('Available')),
-        ('reserved', _('Reserved')),
-        ('adopted', _('Adopted')),
+        ('available', _('Disponibile')),
+        ('reserved', _('Riservato')),
+        ('adopted', _('Adottato')),
     ]
 
     name = models.CharField(_('Name'), max_length=100)

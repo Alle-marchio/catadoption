@@ -135,7 +135,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# parte aggiunta il 4/5
+# parte aggiunta
 LOGIN_REDIRECT_URL = 'home'  # Reindirizza alla homepage dopo il login
 LOGOUT_REDIRECT_URL = 'home'  # Reindirizza alla homepage dopo il logout
 LOGIN_URL = 'login'  # URL per la pagina di login
